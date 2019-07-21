@@ -1,0 +1,20 @@
+<apex:page >
+ 
+ <html>
+  <head>
+  </head>
+  
+  <apex:remoteObjects >
+    <apex:remoteObjectModel name="Account" fields="Id,Name,LastModifiedDate" />
+  </apex:remoteObjects>
+  
+ <body>
+  
+ </body> 
+ 
+ </html>
+ 
+  
+ 
+ 
+</apex:page>

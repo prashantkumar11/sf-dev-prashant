@@ -1,0 +1,33 @@
+<apex:page sidebar="false" showheader="false" standardcontroller="Account" recordSetVar="listOfAcc">
+  
+     <apex:image url="{!$Resource.Companylogo}" width="100px;" />
+     <apex:stylesheet value="{!URLFOR($Resource.StyleCss)}"/>
+     
+     <apex:form >
+     <apex:pageBlock title="Account Detail" >
+     <apex:pageBlockSection columns="1">
+       <apex:outputField value="{!Account.Name}"/>
+       <apex:outputField value="{!Account.AccountNumber}" />
+       <apex:outputField value="{!Account.Fax}" />
+      </apex:pageBlockSection>
+     </apex:pageBlock>
+    </apex:form>    
+
+     
+     <apex:pageBlock title="Contact Details" >
+      <apex:pageBlockSection columns="3">
+       <apex:pageBlockTable value="{!Account.Contacts}" var="Contact">
+        
+        <apex:column headerValue="Contact Name" value="{!Contact.Account}"/>
+        <apex:column headerValue="Email"  value="{!Contact.Email}"/>
+        <apex:column headerValue="Phone"  value="{!Contact.Phone}"/>
+
+       </apex:pageBlockTable>
+      
+      </apex:pageBlockSection>
+     
+     </apex:pageBlock>
+     
+    
+  
+</apex:page>

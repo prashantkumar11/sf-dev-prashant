@@ -1,0 +1,31 @@
+<!--**********************************************************************************
+* Copyright © 2015, Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: edEditFile
+* Created by Anil Meghnathi
+
+* - Edit file in multi upload file component
+
+* - Modifications:
+* - Anil Meghnathi - Initial 
+***********************************************************************************-->
+<apex:page extensions="NEILON.edEditFileController" title="{!$Label.neilon__File_Edit}: {!NEILON__File__c.Name}" sidebar="false" showHeader="true" tabStyle="NEILON__File__c" standardController="NEILON__File__c">
+	<apex:include pageName="NEILON__apIncludeJavaScript" />
+    <apex:pageMessages ></apex:pageMessages>
+    <apex:form rendered="{! !isError}">
+            <c:edMultiFileUploadComponent folderObject="{!fileFolder}"
+                    parentFolderId="{!parentFolderId}"
+                    folderId="{!folderId}"
+                    fileId="{!fileId}"
+                    returnUrl="{!retURL}"  
+                    closeWindowOnCancel="{!closeWindowFlag}" 
+                    sortId="{!strSortId}" 
+                    primaryParentObjectId="{!strMainObjectId}"
+                    primaryParentObjectFieldAPI="{!strMainObjectFieldAPI}"
+                    secondaryParentObjectId="{!strOtherObjectId}"
+                    secondaryParentObjectFieldAPI="{!strOtherObjectFieldAPI}"
+                    callerName="{!strCallerName}" >
+            </c:edMultiFileUploadComponent>
+    </apex:form>
+</apex:page>

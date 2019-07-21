@@ -1,0 +1,61 @@
+<apex:page controller="ContactMultipleSearchWithPagenationCLS" action="{!searchcon}">
+
+  <script type="text/javascript">
+        window.onload=function() {
+        // document.getElementById("{!$Component.thePb.thepbs.conName}").focus();
+        }   
+    </script>
+    
+    <apex:form >
+    
+     <apex:pageBlock title="Contact Detail to Search">
+          <apex:pageblockSection id="thepbs">
+            <apex:inputField value="{!con.lastname}" required="false" id="conName"/>
+            <apex:inputField value="{!con.MobilePhone}" />
+          </apex:pageblockSection>
+         
+         <apex:pageBlockButtons location="bottom">
+          <apex:commandButton value="Search" action="{!searchcon}"/>
+         </apex:pageBlockButtons>
+
+     </apex:pageBlock>
+
+     <apex:pageBlock title="Contact Details" id="noRec" rendered="{! IF(contactlist !=null && contactlist.size == 0, true, false)}"  >
+      <apex:outputPanel >
+       <h1>No Record Found</h1> 
+      </apex:outputPanel>
+     </apex:pageBlock>
+     
+     <apex:pageBlock title="Contact Details" id="details" rendered="{! IF(contactlist !=null && contactlist.size > 0, true, false)}">
+      <apex:pageBlockTable var="c" value="{!contactlist}">
+        
+         <apex:column headerValue="contact Name">
+                <apex:outputLink target="_blank" value="/{!c.id}">{!c.LastName}</apex:outputLink> 
+                </apex:column>   
+                <!--  If you want facet style you can add like this.
+                <apex:column >
+                <apex:facet name="header">Link Name</apex:facet>
+                <apex:outputLink target="_blank" value="/{!c.id}">{!c.LastName}</apex:outputLink> 
+                </apex:column>
+                -->
+           <apex:column value="{!c.MobilePhone}" headerValue="Mobile Phone"/>
+           <apex:column value="{!c.Email}" headerValue="Email"/>     
+                
+      </apex:pageBlockTable>
+      
+      <apex:pageblockButtons >
+       <apex:commandButton value="First Page" rerender="details" action="{!FirstPage}" disabled="{!prev}"/>
+                <apex:commandButton value="Previous" rerender="details" action="{!previous}" disabled="{!prev}"/>
+                <apex:commandButton value="Next" rerender="details" action="{!next}" disabled="{!nxt}"/>
+                <apex:commandButton value="Last Page" rerender="details" action="{!LastPage}" disabled="{!nxt}"/>
+      
+      </apex:pageblockButtons>
+      
+     </apex:pageBlock>
+     
+     
+    </apex:form>
+    
+    
+  
+</apex:page>

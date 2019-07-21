@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fields>
+        <fullName>File_Access_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Organozation wide file access type.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If &quot;Public Read Only&quot;, user will be able to view all files with &quot;Public Read Only&quot; access type .If &quot;Public Write&quot;, user will be able to view and edit all files with &quot;Public Write&quot; access type. If &quot;None&quot;, user will be to view / edit his/her files.</inlineHelpText>
+        <label>File Access Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Public Read Only</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Public Write</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Is_S3_Link_User__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If true, access for S3 Link will be granted.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If true, access for S3 Link will be granted.</inlineHelpText>
+        <label>S3 Link User?</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Checkbox</type>
+    </fields>
+</CustomObject>

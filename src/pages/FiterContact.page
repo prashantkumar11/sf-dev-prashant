@@ -1,0 +1,33 @@
+<apex:page controller="ControllerforAccount">
+
+ <apex:form >
+ 
+
+ 
+ {!$Label.DiscountAmount}
+     <apex:pageBlock >
+         <apex:pageBlockSection columns="1" title="Account">
+         
+         
+         <apex:selectList value="{!selectedAccountId}" size="1">
+             <apex:selectOptions value="{!lstSelectOption}"></apex:selectOptions>
+          <apex:actionSupport event="onchange" action="{!AllContact}" reRender="contactlistId,outputID" />
+      </apex:selectList> 
+      
+      <apex:outputLabel value="{!strMessage }" id="outputID"></apex:outputLabel> 
+      
+                    
+         </apex:pageBlockSection>
+         
+         <apex:pageBlockSection columns="1" id="contactlistId" title="Contacts" >
+         
+             <apex:pageBlockTable value="{!lstContact}" var="con" rendered="{!isShow}" >
+                     <apex:column value="{!con.Name}"/>
+                     <apex:column value="{!con.email}"/>
+             </apex:pageBlockTable>
+         </apex:pageBlockSection> 
+     </apex:pageBlock> 
+     
+ </apex:form>
+
+</apex:page>

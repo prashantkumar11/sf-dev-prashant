@@ -1,0 +1,23 @@
+<!--**********************************************************************************
+* Copyright © 2015 Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: edHome
+* Created by Anil Meghnathi: 06/05/2015
+*
+* - Showing the list of all documents and also allowed to perform various operation on those documents.
+
+* - Modifications:
+* - Anil Meghnathi, 06/05/2015 – Initial Development
+***********************************************************************************-->
+<apex:page standardStylesheets="false" sidebar="false" title="{!$Label.neilon__File_Explorer}" showHeader="{!fileExplorerPageConfugration.isShowHeader}" controller="NEILON.edHomeController">
+    <apex:include pageName="NEILON__apIncludeJavaScript" />
+    <apex:form >
+	    <c:edFileExplorerComponent primaryParentObjectId="{!strMainObjectId}"
+	            primaryParentObjectFieldAPI="{!strMainObjectFieldAPI}"
+	            secondaryParentObjectId="{!strOtherObjectId}"
+	            secondaryParentObjectFieldAPI="{!strOtherObjectFieldAPI}"
+	            callerName="{!strCallerName}" >
+	    </c:edFileExplorerComponent>
+    </apex:form>
+</apex:page>

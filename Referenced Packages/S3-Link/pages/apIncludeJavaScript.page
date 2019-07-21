@@ -1,0 +1,72 @@
+<!--**********************************************************************************
+* Copyright © 2015, Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: apIncludeJavaScript
+* Created by Anil Meghnathi: 07/06/2014
+
+* - All JS are included in this page
+
+* - Modifications:
+* - Anil Meghnathi - Initial 
+***********************************************************************************-->
+<apex:page >
+<!-- jquery stuff -->
+<link rel="stylesheet" type="text/css" href="{!$Resource.Jquery}/jquery/css/ui-lightness/jquery-ui.custom.css" />
+<script type="text/javascript" src="{!$Resource.Jquery}/jquery/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="{!$Resource.Jquery}/jquery/js/jquery-migrate.min.js"></script>
+<script type="text/javascript" src="{!$Resource.Jquery}/jquery/js/jquery-ui.custom.min.js"></script>
+
+<!-- jquery layout -->
+<link rel="stylesheet" type="text/css" href="{!$Resource.Jquery}/jquery/jlayout/complex.css" />
+<script type="text/javascript" src="{!$Resource.Jquery}/jquery/jlayout/jquery.layout.min.js"></script>
+
+<script type="text/javascript" src="{!$Resource.Jquery}/jquery/easytooltip/easyTooltip.js"></script>
+
+<!-- jQuery fancytree-->
+<link rel="stylesheet" type="text/css" href="{!$Resource.jQuery}/jquery/fancytree/skin-win8/ui.fancytree.css" />
+<script type="text/javascript" src="{!$Resource.Jquery}/jquery/fancytree/jquery.fancytree.js"></script>
+<script type="text/javascript" src="{!$Resource.Jquery}/jquery/fancytree/jquery.fancytree.childcounter.js"></script>
+<script type="text/javascript" src="{!$Resource.Jquery}/jquery/fancytree/jquery.fancytree.table.js"></script>
+<script type="text/javascript" src="{!$Resource.Jquery}/jquery/fancytree/jquery.fancytree.filter.js"></script>
+<script type="text/javascript" src="{!$Resource.Jquery}/jquery/fancytree/jquery.fancytree.persist.js"></script>
+
+<!-- jQuery dropdown-->
+<link rel="stylesheet" type="text/css" href="{!$Resource.jQuery}/jquery/bootstrap/jquery.dropdown.min.css" />
+<script type="text/javascript" src="{!$Resource.Jquery}/jquery/bootstrap/jquery.dropdown.js"></script>
+
+<script type="text/javascript" src="{!$Resource.AppurinUtils}/appurin-util.js"></script>
+
+<script type="text/javascript" src="{!$Resource.AppurinUtils}/appurin-twopanelayout.js"></script>
+<script type="text/javascript" src="{!$Resource.AppurinUtils}/appurin-fancytree.js"></script>
+
+<apex:stylesheet value="{!URLFOR($Resource.NEILON__AppurinUtils, 'resources/css/appurin.css')}" />  
+
+<apex:stylesheet value="{!URLFOR($Resource.NEILON__Jquery, 'jquery/ganttchart/codebase/skins/dhtmlxgantt_skyblue.css')}" />
+<script type="text/javascript">
+    //Disable js debugging
+    Appurin.setDebug(false);
+    var j$ = jQuery.noConflict();
+    function easyTooltipWithClassWidthAndOffset(className, width, xoffset, yoffset){
+     	var selector = '.' + className;
+		j$(selector).easyTooltip({width: width, xOffset: xoffset, yOffset: yoffset});
+	}
+</script>
+<style>
+    .ui-widget-header{
+        background-color: #007fcc !important;
+        background-image: none;
+        border: 0px !important;
+    }
+    .ui-jqgrid tr.ui-row-ltr td {
+        border-right: none;
+    }
+    .ui-jqgrid tr.jqgrow{
+        cursor:pointer;
+    }
+    .ui-jqgrid tr.jqgroup td{background-color:#007fcc;!important;}
+    .ui-jqgrid .ui-jqgrid-view {font-size:12px !important;}
+    .ui-jqgrid .ui-jqgrid-toppager { height:30px !important;}
+    .ui-jqgrid .ui-jqgrid-toppager .ui-pg-div>span { margin: 0 5px; font-size: 20px; }
+</style>
+</apex:page>

@@ -1,0 +1,19 @@
+<apex:page controller="Fb_Info">
+  
+  <!--<apex:form > 
+  <apex:pageblock title="Facebook User Information">
+   <apex:commandButton value="Show FB Info" action="{!showData}" />
+    <apex:pageBlock title="JSON RESPONSE">
+      {!json_response}
+    </apex:pageBlock>
+    
+   <apex:pageBlock title="FB User Info By Format">
+      ID : {!SFoundatioAPI.Fb_Info.fbu.id}
+      Name : {!SFoundatioAPI.Fb_Info.fbu.name}
+    </apex:pageBlock> 
+    
+    
+    
+  </apex:pageblock>
+</apex:form>  -->
+</apex:page>

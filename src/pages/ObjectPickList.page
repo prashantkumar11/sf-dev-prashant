@@ -1,0 +1,59 @@
+<apex:page controller="objectController">
+<apex:form > 
+      <apex:pageBlock mode="edit">
+          <apex:pageBlockSection columns="2">
+
+              <apex:pageBlockSectionItem >
+                  <apex:outputlabel value="Object Names :"/> 
+                      <apex:actionRegion > 
+                      <!-- This code block selecting the all objects -->     
+                          <!-- <apex:selectList value="{!selectedObject}" size="1">
+                                    <apex:selectOptions value="{!ObjectNames}"/>
+                                    <apex:actionSupport event="onchange" rerender="myFields"/>
+                            </apex:selectList> -->
+                            
+                        <apex:selectList value="{!selectedObject}" size="1">                        
+                                    <apex:selectOption itemValue="Account" itemLabel="Account" />
+                                    <apex:selectOption itemValue="Contact" itemLabel="Contact"/>
+                                    
+                                    <apex:actionSupport event="onchange" rerender="myFields"/>
+                        </apex:selectList>
+                            
+                     </apex:actionRegion>                         
+              </apex:pageBlockSectionItem>
+
+              
+              
+              <apex:pageBlockSectionItem rendered="false">
+               <apex:outputLabel for="searchText">Search Text</apex:outputLabel>
+               <apex:panelGroup >
+                  <apex:inputText id="searchText" value="{!searchText}"/>
+                  <apex:commandButton value="Go!" action="{!doSearch}" rerender="block" status="status"/>
+               </apex:panelGroup>
+            </apex:pageBlockSectionItem>
+    
+            <apex:pageBlockSection title="Results" id="results" columns="1">
+             <apex:pageBlockTable value="{!results}" var="l" 
+                               rendered="{!NOT(ISNULL(results))}">
+              <apex:column value="{!l.name}"/>
+              <apex:column value="{!l.email}"/>
+              <apex:column value="{!l.phone}"/>
+           </apex:pageBlockTable>
+          </apex:pageBlockSection>
+                           
+
+          </apex:pageBlockSection>
+      </apex:pageBlock>
+  </apex:form>
+</apex:page>
+
+<!-- The above code lists all the objects and the selected object is Account. And if you need only Account,Contact,Lead & opportunity object,you can hardcore the values in visualforce page/apex.-->
+
+<!--
+<apex:selectList value="{!selectedObject}" size="1">                        
+            <apex:selectOption itemValue="Account" itemLabel="Account" />
+            <apex:selectOption itemValue="Contact" itemLabel="Contact"/>
+            <apex:selectOption itemValue="Lead" itemLabel="Lead" />
+            <apex:selectOption itemValue="Opportunity" itemLabel="Opportunity"/>
+</apex:selectList>
+-->

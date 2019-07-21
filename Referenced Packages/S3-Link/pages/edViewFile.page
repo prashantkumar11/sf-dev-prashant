@@ -1,0 +1,18 @@
+<!--**********************************************************************************
+* Copyright © 2015, Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: edViewFile
+* Created by Anil Meghnathi
+
+* - File detail with download history
+
+* - Modifications:
+* - Anil Meghnathi - Initial
+***********************************************************************************-->
+<apex:page id="pageViewFile" standardController="NEILON__File__c" title="{!$ObjectType.NEILON__File__c.Label}: {!NEILON__File__c.Name}" extensions="NEILON.edViewFileController">
+    <apex:sectionHeader rendered="{!!isShowDetail}" title="{!$ObjectType.NEILON__File__c.Label}" subtitle="{!NEILON__File__c.Name}" />
+    <apex:detail inlineEdit="true" rendered="{!isShowDetail}" relatedListHover="false" relatedlist="false" showChatter="true" />
+	<apex:relatedList rendered="{!AND(isShowFileDownloadHistory, OR(NEILON__File__c.OwnerId = $User.Id, isHasModifyAllermissionForFile))}" list="File_Download_History__r" />
+	<apex:relatedList rendered="{!AND(isShowFileAccessControl, OR(NEILON__File__c.OwnerId = $User.Id, isHasModifyAllermissionForFile))}" list="File_Access_Control__r" />
+</apex:page>

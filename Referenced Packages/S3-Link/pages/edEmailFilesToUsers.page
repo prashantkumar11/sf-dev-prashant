@@ -1,0 +1,90 @@
+<!--**********************************************************************************
+* Copyright © 2015, Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: edEmailFilesToUsers
+* Created by Anil Meghnathi
+
+* - Emails file to users
+
+* - Modifications:
+* - Anil Meghnathi - Initial 
+***********************************************************************************-->
+<apex:page controller="NEILON.edEmailFilesToUsersController" docType="html-5.0" title="{!$Label.neilon__Email_Files}" tabStyle="NEILON__File__c">
+	<apex:include pageName="NEILON__apIncludeJavaScript" />
+	<div id="splashDiv" class="apInitiallyDivDisplayNone">
+	    <div class="apdisableBackPage" style="position:fixed;"></div>
+	     <div class="apsplashDiv">
+	        <div class="apcircle"><apex:image value="{!URLFOR($Resource.NEILON__AppurinUtils, 'resources/images/LoadingCircle.gif')}"></apex:image></div>
+	        <div class="aptxt">{!$Label.neilon__Please_Wait}</div>
+	    </div>
+	</div>
+	<apex:form id="form1">
+	    <apex:actionStatus id="splashStatus" onstart="startSplash();" onstop="endSplash();"/>
+        <apex:sectionHeader title="{!$ObjectType.NEILON__File__c.Label}" subtitle="{!$Label.neilon__Email_Files_Page_Subtitle}" />
+        <apex:outputPanel >
+	        <apex:outputLabel value="{!$Label.neilon__Email_Files_Message}"/>
+	    </apex:outputPanel><br/><br/>
+        <apex:pageBlock id="pageblock1" title="{!$Label.neilon__Email}">
+            <apex:pageBlockButtons >
+                <apex:commandButton styleClass="apActiveButton" value="{!$Label.neilon__Send}" action="{!sendEmail}" status="splashStatus" reRender="form1"/>
+                <apex:commandButton styleClass="apActiveButton" value="{!$Label.neilon__Cancel}" rendered="{!!isShowClose}" action="{!Cancel}" status="splashStatus" reRender="form1"/>
+            	<apex:commandButton styleClass="apActiveButton" value="{!$Label.neilon__Close}" rendered="{!isShowClose}" onClick="window.close(); return false;" status="splashStatus" rerender="form1"/>
+            </apex:pageBlockButtons>
+            <apex:pagemessages />
+            <apex:pageBlockSection columns="1">
+	            <apex:pageBlockSectionItem >
+	                    <c:apTreePickerWithSelectComponent treeId="FilePicker" 
+	                    	treeType="{!FileTreeType}"
+	                        treeConfigName="{!FilePickerConfigName}"
+	                        checkableTreeNodes="{!FilePickerCheckableObjectTypes}"
+	                        title="{!$ObjectType.NEILON__File__c.Label} {!$Label.neilon__Picker}" 
+	                        treeWidth="450" 
+	                        treeHeight="350"
+	                        selectedNodes="{!selectedFileNodes}"
+	                        searchableObjectTypes="{!searchableFileObjectTypes}"
+	                        selectableObjectNamesForHeader="File"
+	                        treePickerLabel="{!$ObjectType.NEILON__File__c.Label}"
+	                        selectButtonLabel="{!$Label.neilon__Add_Files_Button}"
+	                        queryParameters="{!queryParameters}">
+	                    </c:apTreePickerWithSelectComponent>
+	            </apex:pageBlockSectionItem>
+	        </apex:pageBlockSection>
+	        <apex:pageBlockSection columns="1">
+	            <apex:pageBlockSectionItem helpText="If empty, URL will expires in 2 days.">
+	                <apex:outputLabel for="expireFileUrlDuration" value="URL Expiration Duration (days)"/>
+	                <apex:input type="number" id="expireFileUrlDuration" label="URL Expiration Duration (days)" value="{!expireFileUrlDuration}"/>
+	            </apex:pageBlockSectionItem>
+	        </apex:pageBlockSection>
+	        <apex:pageBlockSection columns="1">
+	            <apex:pageBlockSectionItem >
+	                    <c:apTreePickerWithSelectComponent treeId="UserPicker" 
+	                    	treeType="{!UserTreeType}"
+	                        treeConfigName="{!UserPickerConfigName}"
+	                        checkableTreeNodes="{!UserPickerCheckableObjectTypes}"
+	                        title="{!$ObjectType.User.Label} {!$Label.neilon__Picker}" 
+	                        treeWidth="450" 
+	                        treeHeight="350"
+	                        selectedNodes="{!selectedUserNodes}"
+	                        searchableObjectTypes="{!searchableUserObjectTypes}"
+	                        selectableObjectNamesForHeader="user"
+	                        treePickerLabel="{!$Label.neilon__To}"
+	                        selectButtonLabel="{!$Label.neilon__Add_Recipients_Button}">
+	                    </c:apTreePickerWithSelectComponent>
+	            </apex:pageBlockSectionItem>
+	        </apex:pageBlockSection>
+	        <apex:pageBlockSection columns="1">
+	            <apex:pageBlockSectionItem >
+	            	<apex:outputLabel value="{!$Label.neilon__Email_Subject}"/>
+	            	<apex:inputText id="subject" style="width:500px;" value="{!emailSubject}"/>
+	            </apex:pageBlockSectionItem>
+	        </apex:pageBlockSection> 
+	        <apex:pageBlockSection columns="1">
+	            <apex:pageBlockSectionItem >
+	            	<apex:outputLabel value="Body"/>
+	            	<apex:inputTextArea rows="10" style="width:500px;" id="body" value="{!emailBody}"/>
+	            </apex:pageBlockSectionItem>
+	        </apex:pageBlockSection> 
+	    </apex:pageBlock>
+	</apex:form>
+</apex:page>

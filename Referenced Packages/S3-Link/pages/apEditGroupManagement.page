@@ -1,0 +1,52 @@
+<!--**********************************************************************************
+* Copyright © 2015, Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: apEditGroupManagement
+* Created by Anil Meghnathi
+
+* - Manages group members
+
+* - Modifications:
+* - Anil Meghnathi - Initial 
+***********************************************************************************-->
+<apex:page controller="NEILON.apGroupManagementController"  title="{!$Label.neilon__Manage_Group_Members}" action="{!initializeGroupMembers}" tabStyle="S3_Link_Administration__tab">
+<apex:include pageName="NEILON__apIncludeJavaScript" />
+<apex:pageMessages />
+<apex:form id="form1" rendered="{!!isError}">
+    <div id="splashDiv" class="apInitiallyDivDisplayNone">
+        <div class="apdisableBackPage" style="position:fixed;"></div>
+         <div class="apsplashDiv">
+            <div class="apcircle"><apex:image value="{!URLFOR($Resource.NEILON__AppurinUtils, 'resources/images/LoadingCircle.gif')}"></apex:image></div>
+            <div class="aptxt">{!$Label.neilon__Please_Wait}</div>
+        </div>
+    </div>
+    <apex:actionStatus id="splashStatus" onstart="startSplash(); hideUserSelectDropDown();" onstop="endSplash(); hideUserSelectDropDown();"/>
+    <apex:pageBlock title="{!$Label.neilon__Group_Management}">
+        <apex:pageBlockButtons >
+            <apex:commandButton value="{!$Label.neilon__Save}" styleClass="apActiveButton" action="{!Save}" />
+            <apex:commandButton value="{!$Label.neilon__Cancel}" styleClass="apActiveButton" action="{!Cancel}" />
+        </apex:pageBlockButtons>
+        <apex:pageBlockSection columns="1">
+            <apex:outputField value="{!selectedPublicGroup.Name}"/>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection columns="1">
+            <apex:pageBlockSectionItem >
+                    <c:apTreePickerWithSelectComponent treeId="UserForGroupPicker" 
+                        treeType="{!TargetObjectType}"
+                        treeConfigName="{!targetObjectPickerConfigName}"
+                        checkableTreeNodes="{!targetObjectPickerCheckableObjectTypes}"
+                        title="User Picker" 
+                        treeWidth="450" 
+                        treeHeight="350"
+                        selectedNodes="{!selectedUserNodes}"
+                        searchableObjectTypes="{!searchableObjectTypes}"
+                        selectableObjectNamesForHeader="user"
+                        treePickerLabel="{!$Label.neilon__Users}"
+                        selectButtonLabel="{!$Label.neilon__Select_Button}">
+                    </c:apTreePickerWithSelectComponent>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:form>
+</apex:page>

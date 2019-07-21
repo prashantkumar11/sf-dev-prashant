@@ -1,0 +1,50 @@
+<!--**********************************************************************************
+* Copyright © 2015, Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: edFileManagementConfiguration
+* Created by Anil Meghnathi - 12/03/2016
+
+* - This is the page for managing the files delete and other access.
+
+* - Modifications:
+* - Anil Meghnathi - Initial - 12/03/2016
+***********************************************************************************-->
+<apex:page controller="NEILON.edFileManagementConfigurationController" title="{!$Label.neilon__File_Management_Configuration}" action="{!init}" tabStyle="S3_Link_Administration__tab">
+	<apex:include pageName="NEILON__apIncludeJavaScript" />
+	<div id="splashDiv" class="apInitiallyDivDisplayNone">
+	    <div class="apdisableBackPage" style="position:fixed;"></div>
+	     <div class="apsplashDiv">
+	        <div class="apcircle"><apex:image value="{!URLFOR($Resource.NEILON__AppurinUtils, 'resources/images/LoadingCircle.gif')}"></apex:image></div>
+	        <div class="aptxt">{!$Label.neilon__Please_Wait}</div>
+	    </div>
+	</div>
+	<style>
+	    .apsplashDiv {
+	        top: 150px !important;
+	        left: 450px !important;
+	    }
+	</style>
+	<apex:pagemessages rendered="{!isError}"/>
+	<apex:form id="form1" rendered="{!!isError}">
+		<apex:actionStatus id="splashStatus" onstart="startSplash();" onstop="endSplash();"/>
+   		<apex:sectionHeader title="{!$Label.neilon__Configuration}" subtitle="{!$Label.neilon__File_Management_Configuration}"/>
+		<apex:pageBlock id="Block1" title="{!$Label.neilon__File_Management_Configuration}">
+			<apex:panelGroup id="buttonsGroup">
+	            <center>                
+	                <apex:commandButton styleClass="apActiveButton"  value="{!$Label.neilon__Save}" action="{!Save}" status="splashStatus" reRender="Block1"/>
+	                <apex:commandButton styleClass="apActiveButton" value="{!$Label.neilon__Reset_to_System_Default_Button}" action="{!Intialize}" status="splashStatus"/>   
+	            </center>
+	        </apex:panelGroup>
+	        <br/>
+			<apex:pageBlockSection id="section2" columns="1">
+				<apex:pageBlockSectionItem id="pgbsItem2" helpText="{!$ObjectType.NEILON__File_Management_Configuration__c.fields.NEILON__Delete_Permissions__c.inlineHelpText}">
+					<apex:outputLabel value="{!$ObjectType.NEILON__File_Management_Configuration__c.fields.NEILON__Delete_Permissions__c.label}" id="outputLabel2"/>
+	                <apex:selectCheckboxes value="{!selectedPermissions}" id="chkListPermissions" layout="pageDirection">
+	            		<apex:selectOptions value="{!availablePermissions}" />
+					</apex:selectCheckboxes>
+				</apex:pageBlockSectionItem>	
+	         </apex:pageBlockSection>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

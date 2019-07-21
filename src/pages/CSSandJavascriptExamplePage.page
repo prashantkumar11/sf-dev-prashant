@@ -1,0 +1,39 @@
+<apex:page sidebar="false" showHeader="false" tabStyle="Lead" StandardController="Account">
+
+    <apex:includeScript value="{!$Resource.TestJS}"/>
+
+     <apex:image url="{!$Resource.LogoImage}" width="100px;"/>
+   
+
+     <apex:stylesheet value="{!URLFOR($Resource.StyleCss)}"/>
+
+    <apex:form >
+    
+    
+    <h1> Hello Dear</h1>
+    
+    <apex:commandButton onclick="show();" value="Click ME"/>
+    
+     <apex:commandButton onclick="show();" value="Click ME111"/>
+     
+     
+     <apex:pageBlock title="User Details">
+         <apex:pageBlockSection title="Section1">
+         
+             <apex:inputField value="{!Account.Name}"/>
+              <apex:inputField value="{!Account.AccountNumber}"/>
+               <apex:inputField value="{!Account.FAX}"/>
+              
+           
+     
+         </apex:pageBlockSection>
+         
+     
+     </apex:pageBlock>
+        
+    
+    </apex:form>
+    
+  
+  
+</apex:page>

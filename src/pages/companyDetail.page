@@ -1,0 +1,15 @@
+<apex:page controller="CompanyDetailsharingExmaple1" >
+  
+  
+      <apex:form >
+      
+          <apex:pageBlock >
+          
+              <apex:pageBlockTable value="{!lstofcom }" var="x">
+                  <apex:column headerValue="Name" value="{!x.name}"/>
+              
+              
+              </apex:pageBlockTable>
+          </apex:pageBlock>
+      </apex:form>
+</apex:page>

@@ -1,0 +1,58 @@
+<!--**********************************************************************************
+* Copyright © 2015-2016, Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: edFileDetail
+* Created by Anil Meghnathi
+
+* - File detail with download history
+
+* - Modifications:
+* - Anil Meghnathi - Initial 
+***********************************************************************************-->
+<apex:page controller="NEILON.edFileDetailController" showHeader="{!isShowMsg}" title="{!$Label.neilon__File_Download}" tabStyle="NEILON__File__c" action="{!init}">
+	<apex:include pageName="NEILON__apIncludeJavaScript" />
+	<style>
+	    .apFileDownloadingMessageDiv{
+    		height: 100%;
+    		padding:10px;
+        }
+        
+        .apFileDownloadMessageLabel{
+        	font-size: large;
+        	padding-top:10px;
+        }
+	</style>
+	<apex:form id="form">
+	    <apex:actionFunction name="downloadFile" action="{!download}" rerender="form"/>
+		<div id="errorMessage" style="{!IF(isShowMsg, '', 'display:none;')}" class="apFileDownloadingMessageDiv">
+        	<div>
+        		<div style="margin:150px;" class="apFileDownloadMessageLabel">
+        		    <apex:outputLabel value="{!errMessage}"></apex:outputLabel>
+        		    <apex:outputLabel value="{!$Label.neilon__Close_Window_Message}"></apex:outputLabel>
+        		    <apex:commandLink value="{!$Label.neilon__Close}" style="padding-left:5px;" onClick="window.close(); return false;"/>
+        		</div>
+        	</div>
+        </div>
+		<div id="downloadindMessage" style="{!IF(isShowMsg, 'display:none;', 'display:block;')}" class="apFileDownloadingMessageDiv">
+        	<div>
+        		<div style="margin:150px;" class="apFileDownloadMessageLabel">
+        		    <apex:outputLabel value="{!$Label.neilon__Downloading}"></apex:outputLabel>
+        		    <apex:outputLabel value="{!$Label.neilon__Manual_File_Download_Message}"></apex:outputLabel>
+        		    <apex:commandLink value="{!$Label.neilon__Download}" style="padding-left:5px;" onClick="downloadFile(); return false;"/>
+        		    <br/><br/>
+        		    <apex:outputLabel value="{!$Label.neilon__Close_Window_Message}"></apex:outputLabel>
+        		    <apex:commandLink value="{!$Label.neilon__Close}" style="padding-left:5px;" onClick="window.close(); return false;"/>
+        		</div>
+        	</div>
+        </div>
+	</apex:form>
+	<script>
+	    // Close the window if file downloaded.
+	    j$(document).ready(function(){
+	        if({!!isShowMsg}){
+	            downloadFile();
+	        }
+	    });
+	</script>
+</apex:page>

@@ -1,0 +1,6 @@
+<apex:page >
+  
+  <apex:image url="{!$Resource.Companylogo}" />
+  
+  
+</apex:page>

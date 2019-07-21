@@ -1,0 +1,46 @@
+<apex:page sidebar="false" standardController="Teacher__c">
+
+
+    
+
+    <apex:form >
+    
+    <apex:image url="{!$Resource.LogoImage}"/>
+    
+     <apex:stylesheet value="{!URLFOR($Resource.StyleCss)}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.TestDemoCss)}"/>
+   
+    <!--  Help URL:  https://developer.salesforce.com/docs/atlas.en-us.pages.meta/pages/pages_resources_reference.htm --->
+   
+    <p>
+       ttttt;
+    </p>
+    
+    
+    <h1>ddddd</h1>
+    <div class="test">
+    
+        Testttt
+    
+    </div>
+       <apex:pageBlock title="Teacher Records" tabStyle="Lead">
+       
+           <apex:pageBlockSection title="Teacher Information">
+           
+               <apex:inputField value="{!Teacher__c.Name}"/>
+               <apex:inputField value="{!Teacher__c.DOB__c}"/>
+               <apex:inputField value="{!Teacher__c.Salary__c}"/>
+                <apex:inputField value="{!Teacher__c.State__c}"/>
+                <apex:inputField value="{!Teacher__c.District__c}"/> 
+                 <apex:inputField value="{!Teacher__c.Status__c}"/> 
+                   
+           </apex:pageBlockSection>
+           
+           <apex:pageBlockButtons location="Bottom" >
+           
+               <apex:commandButton value="Save" action="{!save}"/>
+           </apex:pageBlockButtons>
+       
+       </apex:pageBlock> 
+    </apex:form>
+</apex:page>

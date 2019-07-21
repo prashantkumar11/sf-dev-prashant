@@ -1,0 +1,34 @@
+<apex:page standardController="Account">
+
+<script>
+    function colorPageBlock(pageblock, color) {
+    if (pageblock != null) pageblock.firstChild.style.cssText = "background-color: " + color + ";";
+    }
+</script>
+<apex:form >
+    <apex:pageBlock title="My Content" mode="detail">
+        <apex:pageBlockSection id="redSection" title="My Content Section" columns="2">
+            <apex:inputField value="{!account.name}"/>
+            <apex:inputField value="{!account.site}"/>
+            <apex:inputField value="{!account.Fax}"/>
+            <apex:inputField value="{!account.ParentID}"/>
+            <script>colorPageBlock(document.getElementById("{!$Component.redSection}"), "red");</script>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection id="greenSection" title="My Content Section" columns="2">
+            <apex:inputField value="{!account.name}" onblur="alert('Hello')"/>
+            <apex:inputField value="{!account.site}"/>
+            <script>colorPageBlock(document.getElementById("{!$Component.greenSection}"), "green");</script>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection id="orangeSection" title="My Content Section" columns="2">
+            <apex:inputField value="{!account.name}"/>
+            <apex:inputField value="{!account.site}"/>
+            <script>colorPageBlock(document.getElementById("{!$Component.orangeSection}"), "orange");</script>
+        </apex:pageBlockSection>
+        
+        <apex:commandButton value="Save" action="{!Save}"/>
+    </apex:pageBlock>
+    
+    
+</apex:form>
+
+</apex:page>

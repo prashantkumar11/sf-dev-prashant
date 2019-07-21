@@ -1,0 +1,38 @@
+<apex:page standardController="Teacher__c" recordSetVar="lstofTeacher">
+
+
+    <apex:form >
+    
+        <apex:pageBlock >
+        
+            <apex:pageBlockTable value="{!lstofTeacher}" var="objT">
+                <apex:column headerValue="Name" value="{!objT.Name}" />
+                <apex:column headerValue="Salary" value="{!objT.Salary__c}"/>
+                <apex:column headerValue="Salary" value="{!objT.Status__c}"/>
+            
+            </apex:pageBlockTable>
+        
+        </apex:pageBlock>
+        
+        
+        <table border="1" width="100%">
+        
+            <tr >
+                <td style="color:red;font-weight:bold;"> NAME</td>
+                 <td> Salary</td>
+                  <td> Status</td>
+            </tr>
+            
+            <apex:repeat value="{!lstofTeacher}" var="objT">
+            <tr>
+                <td> {!objT.Name}</td>
+                 <td> {!objT.Salary__c}</td>
+                  <td> {!objT.Status__c}</td>
+            </tr>
+        </apex:repeat>
+        
+        </table>
+    
+    </apex:form>
+  
+</apex:page>

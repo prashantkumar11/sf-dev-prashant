@@ -1,0 +1,22 @@
+<apex:page standardController="Teacher__c" extensions="TestDemo3Controller">
+
+
+    <apex:form >
+    
+    <apex:pageBlock >
+    <apex:pageBlockTable value="{!lstofTeacher}" var="obj">
+    
+    <apex:column headerValue="Name" value="{!obj.name}"/>
+    <apex:column headerValue="Salary" value="{!obj.Salary__c}"/>
+    <apex:column headerValue="Status" value="{!obj.Status__c}"/>
+    
+    
+    </apex:pageBlockTable>
+    
+    
+    </apex:pageBlock>
+    </apex:form>
+
+
+  
+</apex:page>

@@ -1,0 +1,295 @@
+<!--**********************************************************************************
+* Copyright © 2015, Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: apAdminConfiguration
+* Created by Anil Meghnathi
+
+* - Admin configuration
+
+* - Modifications:
+* - Anil Meghnathi - Initial 
+***********************************************************************************-->
+<apex:page id="configPage" controller="NEILON.apAdminConfigurationController" title="S3 Link Administration" action="{!init}" tabStyle="S3_Link_Administration__tab">
+    <apex:pagemessages rendered="{!isError}"/>
+    <apex:form id="configFrm" rendered="{!!isError}">
+    
+        <apex:inputhidden id="hdnOpenedTabIds" value="{!strOpenedTabIds}"/>
+        
+        <apex:include pageName="NEILON__apIncludeJavaScript" />
+        
+        <style>
+            
+            //my css
+            
+            .rich-tab-active {
+                background-image:none ;
+            }
+            
+            .activeTab{
+                
+                /* IE10 Consumer Preview */ 
+                background-image: -ms-linear-gradient(bottom, #FFFFFF 0%, #eb8f00  100%);
+                
+                /* Mozilla Firefox */ 
+                background-image: -moz-linear-gradient(bottom, #FFFFFF 0%, #eb8f00  100%);
+                
+                /* Opera */ 
+                background-image: -o-linear-gradient(bottom, #FFFFFF 0%, #eb8f00  100%);
+                
+                /* Webkit (Safari/Chrome 10) */ 
+                background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #FFFFFF), color-stop(2, #eb8f00 ));
+                
+                /* Webkit (Chrome 11+) */ 
+                background-image: -webkit-linear-gradient(bottom, #FFFFFF 0%, #eb8f00  100%);
+                
+                /* W3C Markup, IE10 Release Preview */ 
+                background-image: linear-gradient(to top, #FFFFFF 0%, #eb8f00  100%);
+                
+                padding: 5px 10px;
+                font-size: 12px;
+                white-space: nowrap;
+            }
+        
+            .inactiveTab{
+                background-image:none ;
+                
+                /* IE10 Consumer Preview */ 
+                background-image: -ms-linear-gradient(top, #FFFFFF 0%, #007fcc  100%);
+                
+                /* Mozilla Firefox */ 
+                background-image: -moz-linear-gradient(top, #FFFFFF 0%, #007fcc  100%);
+                
+                /* Opera */ 
+                background-image: -o-linear-gradient(top, #FFFFFF 0%, #007fcc  100%);
+                
+                /* Webkit (Safari/Chrome 10) */ 
+                background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #FFFFFF), color-stop(2, #007fcc ));
+                
+                /* Webkit (Chrome 11+) */ 
+                background-image: -webkit-linear-gradient(top, #FFFFFF 0%, #007fcc  100%);
+                
+                /* W3C Markup, IE10 Release Preview */ 
+                background-image: linear-gradient(to bottom, #FFFFFF 0%, #007fcc  100%);
+                
+                padding: 5px 4px;
+                font-size: 12px;
+                border: 1px solid gray;
+                border-bottom: 0px;
+                
+                max-width:60px;
+                overflow:hidden;
+                white-space:nowrap;
+                text-overflow:ellipsis;
+                
+                cursor:pointer;
+            }
+            
+            .inactiveTab:hover{
+                background-image: -moz-linear-gradient(bottom, #FFFFFF 0%, #eb8f00  100%);
+                text-shadow: 1px 1px #808080;
+            }
+            
+            .tabPanelContent{
+                height: 100%;
+                background-color: white;
+            }
+            
+            .parentNodeTable{
+                border: 5px #95B8E7 outset;
+                background-color: #ffffff;
+                -webkit-border-radius: 15px;
+                -moz-border-radius: 15px;
+                border-radius: 15px;
+                -moz-box-shadow: inset 0px 0px 5px 0px #000000;
+                -webkit-box-shadow: inset 0px 0px 5px 0px #000000;
+                box-shadow: inset 0px 0px 5px 0px #000000;
+                margin-left: 10px;
+                padding-top:10px;
+                padding-bottom:10px;
+            }
+            .parentNodeDiv{
+                
+                border: 1px solid gray;
+                border-radius: 10px;
+                background: rgb(255,255,255); /* Old browsers */
+                background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(229,229,229,1) 100%); /* FF3.6+ */
+                background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(229,229,229,1))); /* Chrome,Safari4+ */
+                background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%); /* Chrome10+,Safari5.1+ */
+                background: -o-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%); /* Opera 11.10+ */
+                background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%); /* IE10+ */
+                background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%); /* W3C */
+                filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
+                -webkit-transition: box-shadow 0.3s ease-out;  
+                -moz-transition: box-shadow 0.3s ease-out;  
+                -o-transition: box-shadow 0.3s ease-out;  
+                transition: box-shadow 0.3s ease-out;  
+                -webkit-box-shadow: 0 2px 2px rgba(0,0,0,0.75);
+                -moz-box-shadow: 0 2px 2px rgba(0,0,0,0.75);
+                box-shadow: 0 2px 2px rgba(0,0,0,0.75);
+                cursor:pointer;
+            }
+            .parentNodeDiv:hover{
+                background: #feffff; /* Old browsers */
+                background: -moz-linear-gradient(top, #feffff 0%, #007fcc 120%, #007fcc 100%); /* FF3.6+ */
+                background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#feffff), color-stop(120%,#007fcc), color-stop(100%,#007fcc)); /* Chrome,Safari4+ */
+                background: -webkit-linear-gradient(top, #feffff 0%,#007fcc 120%,#007fcc 100%); /* Chrome10+,Safari5.1+ */
+                background: -o-linear-gradient(top, #feffff 0%,#007fcc 120%,#007fcc 100%); /* Opera 11.10+ */
+                background: -ms-linear-gradient(top, #feffff 0%,#007fcc 120%,#007fcc 100%); /* IE10+ */
+                background: linear-gradient(to bottom, #feffff 0%,#007fcc 120%,#007fcc 100%); /* W3C */
+                filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffff', endColorstr='#007fcc',GradientType=0 ); /* IE6-9 */
+                -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.75);
+                -moz-box-shadow: 0 1px 5px rgba(0,0,0,0.75);
+                box-shadow: 0 1px 5px rgba(0,0,0,0.75);
+            }
+            
+            .parentNodeLabel{
+                font-size:15px;
+                letter-spacing:1px;
+                color:Black;
+                -webkit-border-radius: 10px !important;
+                -moz-border-radius: 10px !important;
+                border-radius: 10px !important;
+                text-shadow: 0 1px 0 #CCCCCC, 
+                0 1px 0 #C9C9C9, 
+                0 1px 0 #BBBBBB, 
+                0 1px 0 #B9B9B9, 
+                0 1px 0 #AAAAAA, 
+                0 1px 1px rgba(0, 0, 0, 0.1), 
+                0 0 1px rgba(0, 0, 0, 0.1), 
+                0 1px 1px rgba(0, 0, 0, 0.3), 
+                0 1px 1px rgba(0, 0, 0, 0.2), 
+                0 3px 10px rgba(0, 0, 0, 0.25), 
+                0 5px 10px rgba(0, 0, 0, 0.2), 
+                0 10px 20px rgba(0, 0, 0, 0.15);
+            }
+            .parentNodeDescription{
+                font-size:12px;
+            }
+            .rich-tab-bottom-line {
+				border-bottom-color: #C0C0C0;
+				border-bottom-style: solid;
+				border-bottom-width: 1px;
+				max-width: 50px;
+				overflow: auto;
+				height: 50px;
+				
+			}  
+            .col1 {width:100px;}
+            .col2 {padding:0px;}
+        </style>
+        
+        <div id="curtain" style="background-color: white; opacity: 1; height: 0px; width: 0px;"></div>
+        <div id="layoutContainer" class="ui-layout-container" style="height:500px;overflow:auto;">
+            <div style="-webkit-touch-callout: none;webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;height:100%">
+				<apex:outputPanel id="initPanel" rendered="{!IF(listNodeConfigurations.size == 0 && isNewOrganization == True, TRUE, FALSE)}">
+		        	<br />
+		        	<table width="100%">
+		        		<tr>
+		        			<td align="center">
+		        				<apex:pageMessage severity="INFO"
+									title="{!$Label.neilon__Initialize_New_Org_Message}"
+									/>
+		        			</td>
+		        		</tr>
+		        		<tr><td height="20px"></td></tr>
+		        		<tr>
+		        			<td align="center">
+		        				<apex:commandButton action="{!initializeNewOrg}" styleClass="apActiveButton" rerender="configFrm" value="{!$Label.neilon__Initialize_New_Org_Button}" onclick="Appurin.showLoadingDivInPickerWithDetail();" />
+		        			</td>
+		        		</tr>
+		        	</table>
+		        	<br/>
+				</apex:outputPanel>
+				<apex:outputPanel id="resetPanel" rendered="{!IF(listNodeConfigurations.size == 0 && isNewOrganization == False, TRUE, FALSE)}">
+		        	<br />
+		        	<table width="100%">
+		        		<tr>
+		        			<td align="center">
+		        				<apex:pageMessage severity="INFO"
+									title="{!$Label.neilon__Initialize_Admin_Configuration_Message}"
+									/>
+		        			</td>
+		        		</tr>
+		        		<tr><td height="20px"></td></tr>
+		        		<tr>
+		        			<td align="center">
+		        				<apex:commandButton action="{!reset}" styleClass="apActiveButton" rerender="configFrm" value="{!$Label.neilon__Initialize_Admin_Configuration_Button}" onclick="Appurin.showLoadingDivInPickerWithDetail();"/>
+		        			</td>
+		        		</tr>
+		        	</table>
+		        	<br/>
+				</apex:outputPanel>  
+		        <apex:outputPanel id="dynamicPanel" rendered="{!IF(listNodeConfigurations.size > 0 , TRUE, FALSE)}">
+                	<apex:dynamicComponent id="dynamicTabPanel" componentValue="{!objTabPanel}" />
+                </apex:outputPanel>
+            </div>
+        </div>
+        <apex:actionfunction Name="afOpenChildNodeTab" action="{!openChildNodeTab}" rerender="configFrm" oncomplete="addCloseButton();" >
+            <apex:param name="prmParentNodeId" value="" />
+        </apex:actionfunction>
+        <apex:actionfunction Name="afOpenVFPageTab" action="{!openVFPageTab}" rerender="configFrm" oncomplete="addCloseButton();" >
+            <apex:param name="prmPageUrl" value="" />
+            <apex:param name="prmPageTabeName" value="" />
+            <apex:param name="prmPageTabId" value="" />
+        </apex:actionfunction>
+        <apex:actionfunction Name="afCloseTab" action="{!closeTab}" rerender="configFrm" oncomplete="addCloseButton();" >
+            <apex:param name="prmCloseTabId" value="" />
+            <apex:param name="prmNextNodeId" value="" />
+        </apex:actionfunction>
+    </apex:form>
+    
+    <script>
+        jQuery.noConflict();
+        
+        function openChildNodeTab(parentNodeId){
+            Appurin.showLoadingDivInPickerWithDetail();
+            afOpenChildNodeTab(parentNodeId);
+        }
+        function addCloseButton(){
+            var openedTabIds = document.getElementById('{!$Component.configPage.configFrm.hdnOpenedTabIds}').value;
+            openedTabIds = openedTabIds.substring(0,openedTabIds.length - 1);
+            var allIds = openedTabIds.split(',');
+            for (var i=0;i<allIds.length;i++) {
+                var labelTd = document.getElementById('configPage:configFrm:'+allIds[i]+'_lbl');
+                if (labelTd != null && labelTd.childNodes.length == 1) {
+                    var closeImage = document.createElement("img");
+                    closeImage.setAttribute("id", allIds[i]);
+                    closeImage.setAttribute("src", "{!URLFOR($Resource.NEILON__AppurinUtils, 'resources/images/icons/close.gif')}");
+                    closeImage.setAttribute("height", "13");
+                    closeImage.setAttribute("width", "13");
+                    closeImage.setAttribute("alt", "Close");
+                    closeImage.setAttribute("style", "vertical-align: bottom;padding-left:5px;cursor:pointer;");
+                    closeImage.setAttribute("onclick", "closeTab(this.id)");
+                    labelTd.appendChild(closeImage);
+                }
+            }
+        }
+        function openVFPageTab(pageUrl,pageTabName,pageTabId){
+            Appurin.showLoadingDivInPickerWithDetail();
+            afOpenVFPageTab(pageUrl,pageTabName,pageTabId);    
+        }
+        function closeTab(parentNodeId){
+            
+            Appurin.showLoadingDivInPickerWithDetail();
+            
+            var nextNodeId = '';
+            var closedTab = document.getElementById('configPage:configFrm:'+parentNodeId+'_cell');
+            
+            if (closedTab != null) {
+            
+                if (closedTab.nextSibling != null && closedTab.nextSibling.nextSibling != null) {
+                    nextNodeId = closedTab.nextSibling.nextSibling.id;
+                    nextNodeId = nextNodeId.substring(nextNodeId.lastIndexOf(':')+1,nextNodeId.lastIndexOf('_cell'));
+                } else if (closedTab.previousSibling != null && closedTab.previousSibling.previousSibling != null) {
+                    nextNodeId = closedTab.previousSibling.previousSibling.id;
+                    nextNodeId = nextNodeId.substring(nextNodeId.lastIndexOf(':')+1,nextNodeId.lastIndexOf('_cell'));
+                }
+            }
+            
+            afCloseTab(parentNodeId,nextNodeId);
+            return false;
+        }
+    </script>
+    
+</apex:page>

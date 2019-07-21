@@ -1,0 +1,17 @@
+<apex:page controller="BankDetail">
+
+<apex:dataList value="{!banks}" var="bankdetail">
+
+<tr>
+  <td><apex:outputText value="{!bankdetail.ID}"></apex:outputText></td>
+
+  <td><apex:outputText value="{!bankdetail.City__c}"></apex:outputText></td>
+  <td><apex:outputText value="{!bankdetail.Name}"></apex:outputText></td>
+  <td><apex:outputText value="{!bankdetail.Address__c}"></apex:outputText></td>
+  <td><apex:outputText value="{!bankdetail.IFSC_Code__c}"></apex:outputText></td>
+
+</tr>
+  </apex:dataList> 
+
+  
+</apex:page>

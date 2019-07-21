@@ -1,0 +1,15 @@
+<apex:page controller="AccountNameController">
+  
+  <apex:form >
+    
+       <apex:pageBlock >
+         <apex:pageBlockSection >
+                      <apex:OutputPanel >
+      <apex:selectList value="{!selectedAccountName}" size="1">
+          <apex:selectOptions value="{!NameList}"></apex:selectOptions>
+      </apex:selectList>
+      </apex:OutputPanel>
+     </apex:pageBlockSection>
+    </apex:pageBlock>
+  </apex:form>
+</apex:page>

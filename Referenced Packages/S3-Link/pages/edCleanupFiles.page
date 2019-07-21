@@ -1,0 +1,116 @@
+<!--**********************************************************************************
+* Copyright © 2015-2016, Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: edCleanupFiles
+* Created by Anil Meghnathi
+
+* - Clean up files from salesforc.
+
+* - Modifications:
+* - Anil Meghnathi - Initial 
+***********************************************************************************-->
+<apex:page controller="NEILON.edCleanupFilesController" title="{!$Label.neilon__Cleanup_Files}" tabStyle="S3_Link_Administration__tab">
+	<apex:include pageName="NEILON__apIncludeJavaScript" />
+	<style>
+		/*
+		Removed the dotted border for fancy tree container
+		Displaying the horizonatla scroll bar at the bottom of the tree div, not inside the tree div
+		*/
+		ul.fancytree-container {
+			border: 0px;
+  			overflow: initial;
+		}
+		
+		/*
+		Removed the focus outline for fancy tree container
+		*/
+		.fancytree-treefocus{
+			outline: none;
+		}
+		/*
+		Display wait cursor on center of the screen
+		*/
+	    .apsplashDiv {
+            top: 150px !important;
+            left: 450px !important;
+        }
+        
+        /*
+        Overwrote the stadarard css
+        */
+        .message{
+        	margin: 0px !important;
+        }
+        
+        /*
+        Message style 
+        */
+        .apMessageDiv{
+    		height: 100%;
+    		padding:100px;
+        }
+        
+        .apMessageLabel{
+        	font-size: large;
+        }
+	</style>
+	<script>
+		j$(document).ready(function() {
+			
+		});
+		function cleanup(){
+			var selectedTreeNodes = j$("#cleanupFilesTreeDiv").fancytree('getTree').getSelectedNodes();
+			var selectedNodeKeys = {};
+			j$.each(selectedTreeNodes, function(i, item) {
+				if(!item.folder){
+					selectedNodeKeys[item.key] = item.data.userData.id;
+				}
+			});
+			if(selectedTreeNodes.length != 0){
+				startSplash();
+            	afCleanUp(JSON.stringify(selectedNodeKeys));
+            } else{
+				alert('{!JSENCODE($Label.No_File_Selected_For_Cleanup_Warning)}');
+			}
+			return false;
+		}
+	</script>
+	<div id="splashDiv" class="apInitiallyDivDisplayNone">
+	    <div class="apdisableBackPage" style="position:fixed;"></div>
+	     <div class="apsplashDiv">
+	        <div class="apcircle"><apex:image value="{!URLFOR($Resource.NEILON__AppurinUtils, 'resources/images/LoadingCircle.gif')}"></apex:image></div>
+	        <div class="aptxt">{!$Label.neilon__Please_Wait}</div>
+	    </div>
+	</div>
+	<apex:actionStatus id="splashStatus" onstart="startSplash();" onstop="endSplash(); " />
+	<apex:pageMessages ></apex:pageMessages>
+	<apex:form id="form1" rendered="{! !isNoAmazonCredential}">
+		<apex:actionFunction name="afCleanUp" action="{!cleanUp}" rerender="" onComplete="getFilesNeedsToBeCleanup();">
+			<apex:param name="selectedNodeKeys" value=""/>
+		</apex:actionFunction>
+		<apex:actionFunction name="getFilesNeedsToBeCleanup" action="{!getFilesNeedsToCleanUp}" rerender="form1" onComplete="endSplash();"/>
+        <apex:pageMessage rendered="{!AND(NOT(isJobQueued), treeNodesString != '[]')}" summary="{!$Label.neilon__Cleanup_Files_Message}" severity="info" strength="2" />
+    	<apex:outputPanel rendered="{!AND(NOT(isJobQueued),treeNodesString != '[]')}">
+	    	<apex:commandButton value="{!$Label.neilon__Cleanup_File_Button}"   style="margin-top: 10px;margin-bottom: 5px;" styleclass="apActiveButton" onClick=" return cleanup()"/>
+	    	<c:apTreePickerComponent treeType="Files" treeId="cleanupFilesTreeDiv" 
+             	treeSelectMode="3"
+                treeConfigName=""
+                checkableTreeNodes="{!cleanupObjectTypes}"
+                treeSource="{!treeNodesString}"
+                treeWidth="550"
+                treeHeight="330"
+                showSelectedNodeNamesList="true"
+                isTreePersist="false"
+                jsonStringForSelectedNodes=""
+                isExpandTreeRoots="false">
+           	</c:apTreePickerComponent>
+        </apex:outputPanel>
+        <apex:outputPanel styleClass="apMessageDiv" layout="block" rendered="{!AND(NOT(isJobQueued),treeNodesString == '[]')}">
+        	<apex:outputLabel styleClass="apMessageLabel" value="{!$Label.neilon__No_File_For_Cleanup_Message}"/>
+        </apex:outputPanel>
+		<apex:outputPanel styleClass="apMessageDiv" layout="block" rendered="{!isJobQueued}">
+        	<apex:outputLabel styleClass="apMessageLabel" value="{!$Label.neilon__Cleanup_Files_Job_Queued_Message}"/>
+        </apex:outputPanel>
+	</apex:form>
+</apex:page>

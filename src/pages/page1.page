@@ -1,0 +1,13 @@
+<apex:page standardController="Teacher__c" extensions="TestDemo3Controller">
+
+  <apex:pageBlock >
+   <apex:pageBlockTable value="{!lstofTeacher}"  var="teacher">
+   <apex:column headerValue="Name" value="{!teacher.name}"/>
+   <apex:column headerValue="Salary" value="{!teacher.Salary__c}"/>
+   
+   </apex:pageBlockTable>
+  </apex:pageBlock>
+   
+
+
+</apex:page>

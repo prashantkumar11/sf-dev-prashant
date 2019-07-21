@@ -1,0 +1,321 @@
+<!--**********************************************************************************
+* Copyright © 2015-2016, Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: apApplicationConfiguration
+* Created by Anil Meghnathi
+
+* - System configuration
+
+* - Modifications:
+* - Anil Meghnathi - Initial 
+***********************************************************************************-->
+<apex:page controller="NEILON.apApplicationConfigurationController" title="{!$Label.neilon__S3_Link_System_Configuration}" action="{!init}" tabStyle="S3_Link_Administration__tab">
+    <apex:include pageName="NEILON__apIncludeJavaScript" />
+    <script>
+		j$(document).ready(function() {
+			easyToolTipForAll();
+		});
+		
+        function easyToolTipForAll() {
+            j$('.apHelpTextDynamic').easyTooltip({isFormatted:true});
+            j$('.apHelpText').easyTooltip({isFormatted:true});
+            easyTooltipWithClassWidthAndOffset('apHelpTextX-100Y0', 'auto', -100, 0);
+            easyTooltipWithClassWidthAndOffset('apHelpTextX-50Y0', 'auto', -50, 0);
+            setSectionHeight();
+            return false;
+        }
+        
+		function createBucket(btnCreateBucket,pnl){ 
+		    document.getElementById(btnCreateBucket).style.display = 'none';
+		    document.getElementById(pnl).style.display = '';
+		    return false;
+		}
+		
+		function validateBucket(btnCreateBucket,pnl,msg){
+		    if(msg != ''){
+		        document.getElementById(btnCreateBucket).style.display = 'none';
+		        document.getElementById(pnl).style.display = '';
+		    }
+		    return false;
+		}
+		
+		function hideDom(domElementId){
+		    document.getElementById(domElementId).style.display =  'none';
+		}
+		
+		function defaultRadioChange(element){
+			var mapBucketDiv = 'pbMapAWSBuckets';
+			j$(element).parent().find("input[type='checkbox']").attr('checked',j$(element).val()?'checked':'').change();
+			j$("div[id$='"+mapBucketDiv+"']").find("input[id$='selectRadio']").each(function(i){
+           		 if(j$(this).attr('id') != j$(element).attr('id') && j$(this).attr('checked')){
+           		 	j$(this).attr('checked',false);
+           		 }
+           	});
+			return false;
+		}
+		
+		function defaultCheckBoxChange(element){
+			var mapBucketDiv = 'pbMapAWSBuckets';
+			j$("div[id$='"+mapBucketDiv+"']").find("input[id$='inputCheckBox']").each(function(i){
+           		 if(j$(this).attr('id') != j$(element).attr('id') && j$(this).attr('checked') == 'checked'){
+           		 	j$(this).removeAttr('checked');
+           		 }
+           	});
+		}
+		
+		function activeCheckBoxChange(element){
+			if(j$(element).attr('checked') == 'checked'){
+				j$(element).parent().parent().find("textarea").removeAttr('disabled');
+				j$(element).parent().parent().find("input[id$='selectRadio']").removeAttr('disabled');
+			} else{
+				j$(element).parent().parent().find("textarea").attr('disabled', 'disabled');
+				j$(element).parent().parent().find("input[id$='selectRadio']").removeAttr('checked').attr('disabled', 'disabled');
+				j$(element).parent().parent().find("input[id$='inputCheckBox']").removeAttr('checked');
+			}
+			setDefaultBucket();
+		}
+		
+		function setDefaultBucket(){
+			var mapBucketDiv = 'pbMapAWSBuckets';
+			var isDefaultSetted = false;
+			j$("div[id$='"+mapBucketDiv+"']").find("input[id$='inputCheckBox']").each(function(i){
+				if(j$(this).attr('checked') == 'checked'){
+					isDefaultSetted = true;
+					return false;
+				}
+			});
+			if(!isDefaultSetted){
+				j$("div[id$='"+mapBucketDiv+"']").find("input[id$='isActive']").each(function(i){
+					if(j$(this).attr('checked') == 'checked'){
+						j$(this).parent().parent().find("input[type=radio]").attr('checked', 'checked').change();
+						return false;
+					}
+				});
+			}
+		}
+		
+		function setSectionHeight(){
+			var bucketBlockHeight = parseInt(j$("div[id$='bucketBlock']").css('height'));
+           	j$("div[id$='configBlock']").parent().parent().css('vertical-align','top').css('width','75%');
+            j$("div[id$='bucketBlock']").parent().parent().css('vertical-align','top');
+            j$("div[id$='configBlock']").parent().parent().parent().parent().parent().removeClass('detailList').css('width','100%');
+           	if(bucketBlockHeight > parseInt(j$("div[id$='configBlock']").css('height'))){
+            	j$("div[id$='configBlock']").css('height',bucketBlockHeight).parent().css('overflow', 'auto');
+           	} else{
+           		j$("div[id$='bucketBlock']").css('height', j$("div[id$='configBlock']").css('height'));
+           	}
+		}
+    </script>
+    <style>
+        .helpText{
+            z-index: 9999 !important;    
+        }
+        .apsplashDiv {
+            top: 150px !important;
+            left: 450px !important;
+        }
+        .apTableContainer{
+        	display:table;
+        	width:100%;
+        	border-collapse: collapse;
+        }
+        .apTableHeading{
+        	 display:table-row;
+        	 text-align: center;
+        }
+        .apTableRow{  
+        	 display:table-row;
+        }
+        .avTableColumn{
+        	display:table-cell;
+        	border: 1px solid #CCC;
+        	padding: 5px;
+        }
+        .apTableColumnWithoutBorder{
+        	display:table-cell;
+        	border: 0px;
+        	padding: 2px;
+        }
+        .apPopup {
+            background: none;
+            border-width: 2px;
+            border: 0px;
+            z-index: 9999;
+            padding: 0px;
+            position: absolute;
+            top: 100px;
+        }
+        .apInlineButtonIcon{
+        	padding: 0px 0px 0px 0px !important;
+        	font-size: medium !important;
+        	margin: 0px 0px 0px 5px !important;
+        	border: 0px !important;
+        	background: none !important;
+        	display: inline-block !important;
+        }
+        .apConfigurationHeader{
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .apButtonToLink {
+        	text-decoration: blink !important;
+        	font-size: small !important;
+        	padding: 0px !important;
+        	margin: 0px !important;
+        	color: black !important;
+        }
+    </style>
+    <div id="splashDiv" class="apInitiallyDivDisplayNone">
+	    <div class="apdisableBackPage" style="position:fixed;"></div>
+	     <div class="apsplashDiv">
+	        <div class="apcircle"><apex:image value="{!URLFOR($Resource.NEILON__AppurinUtils, 'resources/images/LoadingCircle.gif')}"></apex:image></div>
+	        <div class="aptxt">{!$Label.neilon__Please_Wait}</div>
+	    </div>
+	</div>
+    <apex:actionStatus id="splashStatus" onstart="startSplash();" onstop="endSplash();"/>
+    <apex:pagemessages rendered="{!isError}"/>
+    <apex:form id="form" rendered="{!!isError}">
+        <apex:outputPanel >
+            <center>
+    	        <apex:commandButton styleClass="apActiveButton" action="{!save}" value="{!$Label.neilon__Save}" status="splashStatus" rerender="form" onComplete="easyToolTipForAll();"/>
+                <apex:commandButton styleClass="apActiveButton" value="{!$Label.neilon__Reset_to_System_Default_Button}"
+                    action="{!Initialize}" status="splashStatus" rerender="form"
+                    onComplete="easyToolTipForAll();"/>
+            </center>
+	    </apex:outputPanel><br/>
+	    <apex:outputPanel id="panelNewBucketForPoup" rendered="{!isShowNewBucket}">
+            <apex:outputPanel styleClass="apPopupBackground"/>
+            <apex:outputPanel styleClass="apPopup" layout="block" style="margin-left:20%;width:300px;">
+                <apex:pageBlock id="pbNewBucket" rendered="{!isShowNewBucket}" title="Create New Bucket">
+                    <apex:pageBlockSection columns="1">
+                        <apex:pageMessage severity="ERROR" strength="1" summary="{!strInvalidBucketName}" rendered="{!AND(strInvalidBucketName != null, strInvalidBucketName != '')}"/>
+                        <apex:pageBlockSectionItem helpText="{!$Label.neilon__New_Bucket_Name_Helptext}">
+                            <apex:outputLabel for="newBucketNameField" value="{!$ObjectType.NEILON__Folder__c.fields.NEILON__Bucket_Name__c.Label}"></apex:outputLabel><apex:inputField id="newBucketNameField" required="true" value="{!newBucketFolder.Name}"/>
+                        </apex:pageBlockSectionItem>
+                        <apex:inputField value="{!newBucketFolder.NEILON__Description__c}"/>
+                        <apex:inputField rendered="false" value="{!newBucketFolder.NEILON__Default__c}"/>
+                    </apex:pageBlockSection>
+                    <center>
+					    <apex:commandButton value="{!$Label.neilon__Create}" style="font-size:13px !important; height:25px !important;" styleClass="apActiveButton" onClick="hideDom('{!$Component.panelNewBucketForPoup}')" action="{!createNewBucket}" status="splashStatus" reRender="form" onComplete="easyToolTipForAll();"/>
+					    <apex:commandButton value="{!$Label.neilon__Cancel}" style="font-size:13px !important; height:25px !important;" styleClass="apActiveButton" onClick="hideDom('{!$Component.panelNewBucketForPoup}')" action="{!hideNewBucket}"  immediate="true" status="splashStatus" reRender="form" onComplete="easyToolTipForAll();"/>
+				    </center>
+				    <script>
+				    	j$("div[id$='pbNewBucket']").find('td.pbTitle').css('width', '100%');
+				    </script>
+				</apex:pageBlock>
+			</apex:outputPanel>
+	    </apex:outputPanel>
+	    <apex:outputPanel id="panelMapBucketForPoup" rendered="{!isShowMapBucket}">
+            <apex:outputPanel styleClass="apPopupBackground"/>
+            <apex:outputPanel styleClass="apPopup" layout="block" style="margin-left:20%;width:60%">
+                <apex:pageBlock id="pbMapAWSBuckets" rendered="{!isShowMapBucket}" title="{!$Label.neilon__Link_Amazon_Buckets}">
+                    <apex:pageMessages />
+                	<apex:pageBlockTable rendered="{!AND(bucketsToMap != null, bucketsToMap.size > 0)}" value="{!bucketsToMap}" var="bucket">
+                		<apex:column ><apex:inputCheckbox onChange="return activeCheckBoxChange(this);" id="isActive" value="{!bucket.isSelected}"/></apex:column>
+                		<apex:column headerValue="{!$ObjectType.NEILON__Folder__c.fields.NEILON__Bucket_Name__c.Label}"><apex:outputLabel value="{!bucket.name}"/></apex:column>
+                		<apex:column headerValue="{!$ObjectType.NEILON__Folder__c.fields.NEILON__Description__c.Label}"><div id="{!JSENCODE(bucket.name)}_description"><apex:inputField value="{!bucket.folder.NEILON__Description__c}" id="description" /><script>if({!!bucket.isSelected}){j$("#{!JSENCODE(bucket.name)}_description").find("textarea").attr('disabled', 'disabled');}</script></div></apex:column>
+                		<apex:column headerValue="{!$ObjectType.NEILON__Folder__c.fields.NEILON__Default__c.Label}" title="{!$ObjectType.NEILON__Folder__c.fields.NEILON__Default__c.inlineHelpText}"><input type="radio" id="{!JSENCODE(bucket.name)}_selectRadio" onChange="return defaultRadioChange(this);"/><script>if({!bucket.isDefault}){j$("#{!JSENCODE(bucket.name)}_selectRadio").attr('checked', 'checked');};if({!!bucket.isSelected}){j$("#{!JSENCODE(bucket.name)}_selectRadio").attr('disabled', 'disabled');}</script><apex:inputCheckbox style="display:none;" id="inputCheckBox" value="{!bucket.isDefault}" onChange="return defaultCheckBoxChange(this);"/></apex:column>
+                	</apex:pageBlockTable>
+                	<apex:pageMessage severity="INFO" strength="1" summary="{!$Label.neilon__No_Bucket_On_Amazon_Message}" rendered="{!OR(bucketsToMap == null, bucketsToMap.size == 0)}"/>
+                    <center style="margin-top: 10px;">
+					    <apex:commandButton rendered="{!bucketsToMap.size > 0}" value="{!$Label.neilon__Save}" style="font-size:13px !important; height:25px !important;" styleClass="apActiveButton" onClick="hideDom('{!$Component.panelMapBucketForPoup}')" action="{!mapBuckets}" status="splashStatus" reRender="form" onComplete="easyToolTipForAll();"/>
+					    <apex:commandButton value="{!$Label.neilon__Cancel}" style="font-size:13px !important; height:25px !important;" styleClass="apActiveButton" onClick="hideDom('{!$Component.panelMapBucketForPoup}')" action="{!hideMapBucket}"  status="splashStatus" reRender="form" onComplete="easyToolTipForAll();"/>
+				    </center>
+				    <script>
+				    	setDefaultBucket();
+				    	j$("div[id$='pbMapAWSBuckets']").find('td.pbTitle').css('width', '100%');
+				    </script>
+				</apex:pageBlock>
+			</apex:outputPanel>
+	    </apex:outputPanel>
+        <apex:pageBlock mode="maindetail">
+        	<apex:pageMessages />
+            <apex:pageBlockSection columns="2">
+		        <apex:pageBlock id="configBlock">
+	            	<apex:pageblockSection columns="1">    
+					    <apex:outputPanel >
+        		            <apex:pageblockTable headerClass="apTableCaption" value="{!appData}" var="app">
+        		                <apex:column value="{!app.name}">
+        		                    <apex:facet name="header">{!$Label.neilon__Name}</apex:facet>
+        		                </apex:column>
+        		                <apex:column value="{!app.description}">
+        		                    <apex:facet name="header">{!$Label.neilon__Description}</apex:facet>
+        		                </apex:column>
+        		                <apex:column >
+        		                    <apex:facet name="header">{!$Label.neilon__Value}</apex:facet>
+        		                    <apex:selectRadio value="{!app.configuredValue}"
+        		                        rendered="{!app.displayLayout == 'Radio'}">
+        		                        <apex:selectOptions value="{!RadioOptions}"></apex:selectOptions>
+        		                    </apex:selectRadio>
+        		                    <apex:inputText value="{!app.configuredValue}"
+        		                        rendered="{!app.displayLayout == 'Simple Text'}"
+        		                        style="width:250px">
+        		                    </apex:inputText>
+        		                    <apex:inputSecret redisplay="true" value="{!app.configuredValue}"
+        		                        rendered="{!app.displayLayout == 'Secret Text'}"
+        		                        style="width:250px">
+        		                    </apex:inputSecret>
+        		                </apex:column>
+        		            </apex:pageblockTable>
+    		            </apex:outputPanel>
+	                </apex:pageblockSection>
+		        </apex:pageBlock>
+		        <apex:pageBlock id="bucketBlock">
+					<apex:pageblockSection columns="1">    
+					    <apex:outputPanel >
+    					    <apex:outputLabel styleClass="apConfigurationHeader">{!$Label.neilon__Bucket_Section_Header}</apex:outputLabel>
+    					    <apex:commandButton id="newBucket" image="{!URLFOR($Resource.NEILON__AppurinUtils, 'resources/images/icons/added.png')}" 
+    					    		styleClass="apInlineButtonIcon apHelpTextX-100Y0" 
+    					    		title="{!$Label.neilon__New_Bucket_Helptext}" 
+                            		style="vertical-align:middle; margin: 0px 0px 5px 4px !important;float:right;"
+                            		rendered="true"
+                            		disabled="{! !isAmazonCredentialProvided}"
+                                  	action="{!showNewBucket}"
+                                  	status="splashStatus"
+                                  	rerender="form"
+                                  	onComplete="easyToolTipForAll();">
+                            </apex:commandButton>
+                            <apex:commandButton id="mapBucket" image="{!URLFOR($Resource.NEILON__AppurinUtils, 'resources/images/icons/mapping.png')}" 
+                            		styleClass="avButtonToLink apInlineButtonIcon apHelpTextX-100Y0" 
+                                    title="{!$Label.neilon__Link_Bucket_Helptext}" 
+                                    style="vertical-align:middle; margin: 0px 0px 5px 4px !important;float:right;"
+                                    rendered="true"
+                                    disabled="{! !isAmazonCredentialProvided}"
+                                    action="{!showMapBucket}"
+                                    status="splashStatus"
+                                    rerender="form"
+                                    onComplete="easyToolTipForAll();">
+                            </apex:commandButton>
+                        </apex:outputPanel>
+					    <apex:outputPanel >
+					        <div class="apTableContainer">
+    				            <apex:repeat rendered="{!configuredBuckets.size > 0}" value="{!configuredBuckets}" var="bucket">
+	    				            <div class="apTableRow">
+	        				            <div class="apTableColumnWithoutBorder"><a target="_blank" class="apHelpText" title="{!bucket.folder.NEILON__Description__c}" href="/{!bucket.id}"><apex:outputLabel value="{!bucket.name}"/></a></div>
+	        				            <div class="apTableColumnWithoutBorder apHelpTextX-50Y0" title="{!$ObjectType.NEILON__Folder__c.fields.NEILON__Default__c.InlineHelpText}"><apex:inputCheckBox value="{!bucket.isDefault}" disabled="true"></apex:inputCheckBox></div>
+	        				            <div style="text-align: center;"  class="apTableColumnWithoutBorder">
+	                        				<apex:commandButton style="color: black !important;" 
+	                        				                    styleClass="apButtonToLink apHelpTextX-100Y0" title="{!$Label.neilon__Hide_Bucket_In_File_Explorer_Helptext}" 
+	                                                            id="deleteEvidenceButton"
+	                                                            reRender="bucketBlock" 
+	                                                            value="x"
+	                                                            action="{!removeBucketMap}"
+	                                                            status="splashStatus"
+	                                                            onComplete="easyToolTipForAll();">
+	                        				    <apex:param name="bucketToRemoveMap" value="{!bucket.id}"></apex:param>
+	                                    	</apex:commandButton>
+	                        			</div>
+	    			                </div>
+                                </apex:repeat>
+                                <apex:outputLabel value="{!$Label.neilon__No_Bucket_Linked_Message}" rendered="{!configuredBuckets.size == 0}"/>
+				            </div>
+					    </apex:outputPanel>
+					</apex:pageblockSection>
+		        </apex:pageBlock>
+        	</apex:pageBlockSection>
+        	<apex:pageBlockSection >
+	       </apex:pageBlockSection>
+       	</apex:pageBlock>
+    </apex:form>
+</apex:page>

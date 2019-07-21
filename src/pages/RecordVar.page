@@ -1,0 +1,58 @@
+<apex:page standardController="Account"  recordSetVar="listOfAcc" extensions="Accounthandler">
+
+<apex:pageBlock >
+  <apex:pageBlockTable value="{!listOfAcc}" var="list">
+      <apex:column headerValue="Name" value="{!list.Name}"/>
+      <apex:column headerValue="Account Number" value="{!list.AccountNumber}"/>
+      <apex:column headerValue="Account fax" value="{!list.fax}"/>
+    
+  </apex:pageBlockTable>
+  
+  <table border="1">
+  
+     <tr>
+      <td> name</td>
+      <td> account number</td>
+      <td>fax</td>
+      <td>phone</td>
+     </tr>
+     
+     <apex:repeat value="{!listOfAcc}" var="list">
+      <tr>
+      <td style="color:red;"> {!list.name}</td>
+      <td> {!list.accountnumber}</td>
+      <td>{!list.fax}</td>
+      <td>{!list.phone}</td>
+     </tr>
+     
+     </apex:repeat>
+  
+  </table>
+  
+  
+  <table border="1">
+  
+     <tr>
+      <td> name</td>
+      <td> account number</td>
+      <td>fax</td>
+      <td>phone</td>
+     </tr>
+     
+     <apex:repeat value="{!lstofacc1}" var="list">
+      <tr>
+      <td style="color:red;"> {!list.name}</td>
+      <td> {!list.accountnumber}</td>
+      <td>{!list.fax}</td>
+      <td>{!list.phone}</td>
+     </tr>
+     
+     </apex:repeat>
+  
+  </table>
+
+</apex:pageBlock>
+  
+  
+  
+</apex:page>

@@ -1,0 +1,20 @@
+<apex:page sidebar="false" showHeader="false">
+  
+  <!--<apex:image url="{!$Resource.Companylogo}" width="100px;"/>-->
+  <!--<apex:includeScript value="{!$Resource.hello}" />-->
+  <!--<apex:stylesheet value="{!URLFOR($Resource.StyleCss)}"/> -->
+  
+  
+  
+  <apex:image url="{!URLFOR($Resource.imagezip,'image/index.jpeg')}" width="50" height="50"/>
+  <apex:includescript value="{!URLFOR($Resource.scriptzip, 'js/hello1.js')}"/>
+  <apex:stylesheet value="{!URLFOR($Resource.csszip, 'css/styleClass1.css')}" />
+  
+  
+  <apex:form >
+  <h1>Hiiiiiiiiiii</h1>
+  
+  <apex:commandButton onclick="hello()" value="CLICK ME" />
+  </apex:form>
+  
+</apex:page>

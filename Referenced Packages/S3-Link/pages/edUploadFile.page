@@ -1,0 +1,318 @@
+<!--**********************************************************************************
+* Copyright © 2015-2016, Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: edUploadFile
+* Created by Anil Meghnathi: 14/06/2015
+*
+* - Used for browser based file upload to overcome 1MB file size limit.After fiel uploaded to AWS successfully it will 
+be redirected to this page so we can display success message and we can close the window in page action.
+
+* - Modifications:
+* - Anil Meghnathi, 14/06/2015 – Initial Development
+***********************************************************************************-->
+<apex:page controller="NEILON.edUploadFileController" showHeader="false" standardStylesheets="false" action="{!initData}">
+    <apex:include pageName="NEILON__apIncludeJavaScript" />
+    <apex:actionStatus id="splashStatus" onstart="startSplash();" onstop="endSplash(); " />
+    <style>
+    	.apFieldLabelColumn {
+            text-align: right;
+            vertical-align: middle;
+            float: right;
+            font-weight: bold;
+        }
+        
+        .apTableColumnWithoutBorder{
+        	padding:4px 0px 4px 0px;
+        }
+        
+        .apsplashDiv {
+            left: 100px;
+            top: 20px;
+            padding: 3px;
+        }
+        
+        .apUploadButton .gantt_cancel_btn {
+           background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAALZSURBVDhPhZNrSJNRGMdN8kteIogwkMIINSqUFO9UZmCUJAhe0kgwXUIq1pdS8cJEaB8jiPrghwjKJKy8rYZuajFvs6mbW9NNxd0vzs3t3eXdO/+dLTDsogf+POf8n+f8znngnJCQfUabAAf3q9mVb5u0RLUr6HvsZWaoY8UvZauY5c5V/1Tnqu8ZR0mn7AlrWXBltKt84g4j0EbUrAWaNECLDmCbidYZD1vh5bwUIewvUMsildakpDca9UDdDx9q5TRqZDRYi17cJ/PAukEFtBNQq8LTBSB0B8KRb0c+lLokDeS0uxIPKoluzbtRK/OgUeFBOZlXEC+Qq5b78IjcrFnmrt4BNCxQrNo1oHzOhWIxFdQTpRsrTgZ2ehs9Oi8qFygUfqdQSnKVSqBe4lQ8XdqOCkKq5ylu+RKQP+1AhdiJPp0HTq8fXp8fLtoPhvFDavOhVU6hYMaBAhGByBk8kDhyQkgvB8pm7fL8eQa5QhuKZuyoEtsxavRiw8VAT25hpBhwFBTuzNpxbdKGqxN2FMtA6rZYAUBowcSm8vKMB1njVqSOWRE3bMG7NReMDgarmzTW7TRKp22IJ34mqQno+hyDsilrfbCFG0KrKH3Kg8QRM9JHLUgTmPFiyQGh3g2+xo0xrRu3pzaRSvxkvhmJfAuuzNIo/LZREgTkfbU8T5mmcYJrwOM5G96vUHijcuKt8re6yfrVshPZAhNODVuRNWqhSsbtcUHATYE5JVlgYWJ4FiTxjLjINyFzxIQMokAMKJt4WSTGDumRIKSRzTN073pMWTwdJ17oxeF+PSI+qBH5UfOH1EH/+IgjcIgxj6uJ3wVgiURhF7jarliBA0e+bCKcAMJ71ThEFIiR/QZEC1w4wzUaMvrWcv/7J5IHNTWn+7WyGK4Jx3g2HCWwaBJPDui3zn42vc7uVf3qe69R1CONSB1Q55wf1Fad+7RelzSgL7rUp034156ffvI+nKHFFsAAAAAASUVORK5CYII=');
+        }
+        
+        .gantt_btn_set{
+            float: none !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            display: inline-block;
+            color: black;
+            font-family: Helvetica, sans-serif !important;
+            margin: 7px 0px 7px 10px;
+            padding: 2px 15px 2px 10px;
+            font-weight: bold;
+        }
+        
+        .gantt_btn_set:hover{
+            color: #1797D3 !important;
+        }
+        
+        .apFileUploadingMessageDiv{
+    		height: 100%;
+    		padding:10px;
+        }
+        
+        .apFileUploadMessageLabel{
+        	font-size: large;
+        	padding-top:10px;
+        }
+    </style>
+    <script>
+    	j$(document).ready(function(){
+        	if('{!JSENCODE($CurrentPage.parameters.isSuccess)}' == 'true'){
+        		var att = {};
+        		att.Replace = '{!JSENCODE($CurrentPage.parameters.replace)}' == 'true';
+                att.Size = '{!JSENCODE($CurrentPage.parameters.fileSize)}';
+                att.Name = '{!JSENCODE($CurrentPage.parameters.fileName)}';
+                att.Extension = '{!JSENCODE($CurrentPage.parameters.fileExtension)}';
+                att.ContentType = '{!JSENCODE($CurrentPage.parameters.fileContentType)}';
+                att.Folder = '{!JSENCODE($CurrentPage.parameters.selectedFolder)}';
+                att.BucketName = '{!JSENCODE($CurrentPage.parameters.bucket)}';
+            	createFileInSalesforce(JSON.stringify(att), '{!JSENCODE($CurrentPage.parameters.isPublicOnAmazon)}', '{!JSENCODE($CurrentPage.parameters.isAllowDownloadByURL)}','{!JSENCODE($CurrentPage.parameters.mainObjectFieldAPI)}', '{!JSENCODE($CurrentPage.parameters.mainObjectId)}', '{!JSENCODE($CurrentPage.parameters.fileIndexForMultipleUpload)}');
+            }
+        });
+        
+        function showFileNameField(){
+        	j$('#fileError').css('display','none');
+        	j$("label[id$='fileLabel']").parent().css('color','black');
+        	j$("#fileNameField").val('');
+        	var input = document.getElementById('fileToUpload');
+        	if(input.files.length > 0 ){
+        		var file = input.files[0];
+        		j$("#fileNameField").val(file.name).parent().parent().css('display', '');
+        	}
+        }
+        
+        function showReplaceMessage(){
+        	j$("#fileNameField").data('duplicateFileName', j$("#fileNameField").val());
+        	j$("#replaceField").removeAttr('checked').parent().parent().css('display', '');
+        	endSplash();
+        }
+        
+        function updateFormData(s3AccessKey, policy, signedPolicy, redirectUrl){
+            j$("input[id$='AWSAccessKeyId']").val(s3AccessKey);
+            j$("input[id$='policy']").val(policy);
+            j$("input[id$='signature']").val(signedPolicy);
+            j$("input[id$='successActionRedirect']").val(redirectUrl);
+            j$("input[id$='acl']").val('{!JSENCODE($CurrentPage.parameters.isPublicOnAmazon)}' == 'true'? 'public-read': 'private');
+            j$("div[id$='panelGrid']").css('display', 'none');
+            j$("#uploadindMessage").css('display', 'block');
+            j$("#fileSubmitForm").submit();
+            return false;
+        }
+         
+        function uploadFile(selectedFolder){
+            var input = document.getElementById('fileToUpload');
+            if(input.files.length === 0 ){
+                j$("label[id$='fileLabel']").parent().css('color', 'red');
+                return false;
+            }else{
+                var file = input.files[0];
+                var att = {};
+                att.Size = file.size;
+                if(('{!JSENCODE(s3LinkConfig.configForMaxFileSize.Configured_Value__c)}' != '') && ((file.size/1024) > parseFloat('{!JSENCODE(s3LinkConfig.configForMaxFileSize.Configured_Value__c)}'))){
+                    j$('#fileError').html('{!JSENCODE($Label.Max_File_Size_Error)}');
+                    j$('#fileError').css('display','block');
+                    return false;
+                }
+                if(j$("#fileNameField").val().trim() == ''){
+                	att.Name = file.name;
+                } else{
+                	att.Name = j$("#fileNameField").val();
+                }
+                att.Extension = '.'+file.name.split('.').pop();
+                setFileNameWithExtension(att);
+                if(att.Name.length > 80){
+                	j$('#fileError').html('{!JSENCODE($Label.File_Name_Too_Long_Error)}');
+                    j$('#fileError').css('display','block');
+                    return false;
+                }
+                if(att.Name.indexOf('>') != -1 || att.Name.indexOf('<') != -1 || att.Name.indexOf('?') != -1 || att.Name.indexOf('&') != -1 || att.Name.indexOf('/') != -1){
+                    j$('#fileError').html('{!JSENCODE($Label.Invalid_File_Name_Message)}');
+                    j$('#fileError').css('display','block');
+                    return false;
+                }
+                att.ContentType = file.type;
+                j$("#fileNameField").val(att.Name);
+                att.Folder = selectedFolder;
+                if(att.Name == j$("#fileNameField").data('duplicateFileName')){
+                	att.Replace = j$("#replaceField").attr('checked') == 'checked';
+                } else{
+                	att.Replace = false;
+                }
+                if(j$("#fileNameField").data('duplicateFileName') == undefined || att.Name != j$("#fileNameField").data('duplicateFileName') || (att.Name == j$("#fileNameField").data('duplicateFileName') && j$("#replaceField").attr('checked') == 'checked')){
+                	j$("#filekey").val(j$("input[id$='folderPath']").val() + att.Name);
+                	setSuccessActionUrl(JSON.stringify(att));
+                } else{
+                	j$("#replaceField").parent().parent().css('display', '');
+                }
+            }
+        }
+        
+        function setFileNameWithExtension(att){
+        	var extension = '.undefined';
+			if(att.Name.indexOf('.') != -1){
+				extension = '.'+att.Name.split('.').pop();
+			} else{
+				extension = att.Extension;
+			}
+			
+			if(extension == null || extension == '' || extension == '.'){
+				if(att.Extension == null){
+					extension = '.undefiled';
+				} else{
+					extension = att.Extension;
+				}
+			}
+			
+			att.Extension = extension;
+			
+			if(att.Name.indexOf('.') != -1){
+				if(att.Name.lastIndexOf('.') == att.Name.length - 1){
+					att.Name = att.Name.substring(0, att.Name.length-1)+att.Extension;
+				}
+			} else{
+				att.Name = att.Name+att.Extension;
+			}
+        }
+        
+        function closeWindow(){
+            window.close();
+            return false;
+        }
+    </script>
+    
+    <div id="splashDiv" class="apInitiallyDivDisplayNone">
+        <div class="apdisableBackPage" style="position:fixed;"></div>
+         <div class="apsplashDiv">
+            <div class="apcircle"><apex:image value="{!URLFOR($Resource.NEILON__AppurinUtils, 'resources/images/LoadingCircle.gif')}"></apex:image></div>
+            <div class="aptxt">{!$Label.Please_Wait}</div>
+        </div>
+    </div>
+    
+    <div id="uploadindMessage" style="display:none;" class="apFileUploadingMessageDiv">
+    	<div>
+            <div><center><apex:image value="{!URLFOR($Resource.NEILON__AppurinUtils, 'resources/images/LoadingCircle.gif')}"></apex:image></center></div>
+    		<div class="apFileUploadMessageLabel"><apex:outputLabel value="{!$Label.neilon__Uploading}"/></div>
+    	</div>
+    </div>
+    
+    <apex:pageMessages ></apex:pageMessages>
+    
+    <apex:outputPanel id="panelGrid" layout="block" rendered="{! !isNoAmazonCredential}">
+	    <form style="{!IF(OR(JSENCODE($CurrentPage.parameters.isSuccess)=='true',selectedFolder == null),'display:none;','margin:10px;')}" id="fileSubmitForm" action="https://s3.amazonaws.com/{!selectedBucket}" method="post" enctype="multipart/form-data">
+	        <input type="hidden" id="filekey" name="key"/> 
+	        <input type="hidden" id="AWSAccessKeyId" name="AWSAccessKeyId"/> 
+	        <input type="hidden" id="policy" name="policy"/> 
+	        <input type="hidden" id="signature" name="signature"/> 
+	        <input type="hidden" id="acl" name="acl"/> 
+	        <input type="hidden" name="success_action_redirect" id="successActionRedirect"/>
+	        <center>
+	        <div class="apTableContainer">
+	        	<div class="apTableRow">
+		            <div class="apTableColumnWithoutBorder apFieldLabelColumn">
+		            	<div class="apTableContainer">
+	                		<div class="apTableRow">
+	                			<div class="apTableColumnWithoutBorder" style="min-width:60px;padding-right: 0px;">
+	                				<apex:outputLabel id="fileLabel" value="{!$ObjectType.NEILON__File__c.Label}"/><apex:outputLabel rendered="{!s3LinkConfig.configForMaxFileSize.NEILON__Configured_Value__c != null}" value="({!$Label.neilon__Max_File_Size_Message} {!s3LinkConfig.configForMaxFileSize.NEILON__Configured_Value__c} KB)"/>
+	                			</div>
+	                			<div class="apTableColumnWithoutBorder" style="padding:0px;">
+	                                <span class="apHelpText">
+	                                    <apex:outputPanel >
+	                                        <img src="/s.gif" alt="" class="helpOrb apHelpText" title="{!$Label.Select_File_Helptext}"/>
+	                                    </apex:outputPanel>
+	                                </span>
+	                            </div>
+	                		</div>
+	                	</div>
+		            </div>
+		            <div class="apTableColumnWithoutBorder" style="vertical-align: middle;">
+		                <em style="font-size: 18px; color: #CC0000;float:left;">|</em>
+		                <input id="fileToUpload" type="file" style="max-width:200px;float:left;" onChange="showFileNameField();" name="file"/><br/>
+	                    <b id="fileError" style="display:none;color:red;float:left; text-align:left;"><apex:outputLabel value="{!$Label.neilon__Please_Select_File}"/></b>
+		            </div>
+	        	</div>
+	        	<div class="apTableRow" style="display:none;">
+		            <div class="apTableColumnWithoutBorder apFieldLabelColumn">
+	                	<div class="apTableContainer">
+			            	<div class="apTableRow">
+			           			<div class="apTableColumnWithoutBorder" style="padding-right: 0px;">
+			           				<apex:outputLabel value="{!$ObjectType.NEILON__File__c.Label} {!$Label.neilon__Name}"/>
+			           			</div>
+			           			<div class="apTableColumnWithoutBorder" style="padding:0px;">
+		                           <span class="apHelpText">
+		                               <apex:outputPanel >
+		                                   <img src="/s.gif" alt="" class="helpOrb apHelpText" title="{!$Label.File_Name_Helptext}"/>
+		                               </apex:outputPanel>
+		                           </span>
+		                       	</div>
+	                       	</div>
+	                	</div>	
+	           		</div>
+		            <div class="apTableColumnWithoutBorder">
+		                <em style="font-size: 18px; color: #CC0000;float:left;">|</em>
+		                <input style="float:left;" id="fileNameField"/>
+		            </div>
+	        	</div>
+	        	<div class="apTableRow" style="display:none;">
+		            <div class="apTableColumnWithoutBorder apFieldLabelColumn labelCol" style="color:red;">
+	                	<div class="apTableContainer">
+	                		<div class="apTableRow">
+	                			<div class="apTableColumnWithoutBorder">
+	                				<apex:outputLabel value="{!$Label.neilon__Duplicate_Replace_Message}"></apex:outputLabel>
+	                			</div>
+	                			<div class="apTableColumnWithoutBorder">
+	                                <span class="apHelpText">
+	                                    <apex:outputPanel >
+	                                        <img src="/s.gif" alt="" class="helpOrb apHelpText" title="{!$Label.Duplicate_Replace_Helptext}"/>
+	                                    </apex:outputPanel>
+	                                </span>
+	                            </div>
+	                		</div>
+	                	</div>
+		            </div>
+		            <div class="apTableColumnWithoutBorder" style="vertical-align: middle;">
+		                <input style="float:left;" type="checkBox" id="replaceField"/>
+		            </div>
+	        	</div>
+	        </div>
+	        <div class="gantt_btn_set gantt_right_btn_set gantt_cancel_btn_set apUploadButton" onClick="return uploadFile('{!JSENCODE(selectedFolder)}');">
+	            <div class="gantt_cancel_btn"></div>
+	            <div><apex:outputLabel value="{!$Label.neilon__Upload}"/></div>
+	        </div>
+	        <div class="gantt_btn_set gantt_right_btn_set gantt_cancel_btn_set" onClick="return closeWindow();">
+	            <div class="gantt_cancel_btn"></div>
+	            <div><apex:outputLabel value="{!$Label.neilon__Cancel}"/></div>
+	        </div>
+	        </center>
+	    </form>
+    </apex:outputPanel>
+    
+    <apex:form >
+        <apex:inputHidden value="{!folderPath}" id="folderPath"/>
+	    <apex:actionFunction name="setSuccessActionUrl" action="{!setSuccessActionUrl}" status="splashStatus" rerender="" onComplete=" if('{!JSENCODE(isDuplicateFound)}' == 'true'){return showReplaceMessage();} else{return updateFormData('{!JSENCODE(s3Key)}', '{!JSENCODE(policy)}', '{!JSENCODE(signedPolicy)}', '{!JSENCODE(redirectUrl)}');}">
+	        <apex:param name="jsonForFileDetail" value="" />
+	    </apex:actionFunction>
+	    <apex:actionFunction name="createFileInSalesforce" action="{!createFile}" rerender="">
+	    	<apex:param name="jsonForFileDetail" value=""/>
+	    	<apex:param name="isPublicOnAmazon" value=""/>
+	    	<apex:param name="isAllowDownloadByURL" value=""/>
+	    	<apex:param name="mainObjectFieldAPI" value=""/>
+	    	<apex:param name="mainObjectId" value=""/>
+	    	<apex:param name="fileIndexForMultipleUpload" value=""/>
+	    </apex:actionFunction>
+	    <apex:outputPanel style="margin:10px;" rendered="{!AND(JSENCODE($CurrentPage.parameters.isSuccess) == 'true', !isNoAmazonCredential)}">
+            <div style="margin-top:60px;">
+            	 <center class="apFileUploadMessageLabel">
+                    <apex:outputLabel value="{!$Label.neilon__File_Uploaded_Succesfully}" style="font-weight:bold;" /><br></br>
+                    <input type="button" value="{!$Label.Ok}" class="apActiveButton" onClick="window.opener.startSplash();window.opener.getFilesAndFolders(); return closeWindow();"/>
+                </center>
+            </div>
+        </apex:outputPanel>
+    </apex:form>
+</apex:page>

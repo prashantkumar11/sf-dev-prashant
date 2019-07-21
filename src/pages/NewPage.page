@@ -1,0 +1,24 @@
+<apex:page standardController="Teacher__c">
+<apex:form >
+
+<apex:pageBlock title="Teacher Records" tabStyle="Lead">
+<apex:pageBlockSection title="Teacher Information">
+<apex:inputField value="{!Teacher__c.Name}"/>
+<apex:inputField value="{!Teacher__c.DOB__c}"/>
+<apex:inputField value="{!Teacher__c.Salary__c}"/>
+<apex:inputField value="{!Teacher__c.State__c}"/>
+<apex:inputField value="{!Teacher__c.District__c}"/> 
+ <apex:inputField value="{!Teacher__c.Status__c}"/>
+</apex:pageBlockSection>
+
+<apex:pageBlockButtons location="Bottom" >
+
+<apex:commandButton value="Save" action="{!save}"/>
+</apex:pageBlockButtons>
+</apex:pageBlock> 
+
+
+</apex:form>
+
+
+</apex:page>

@@ -1,0 +1,95 @@
+<!--**********************************************************************************
+* Copyright © 2015-2016, Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: edFileExplorerPageConfiguration
+* Created by Anil Meghnathi
+
+* - File explorer page configration
+
+* - Modifications:
+* - Anil Meghnathi - Initial 
+***********************************************************************************-->
+<apex:page controller="NEILON.edFileExplorerPageConfigController" title="{!$Label.neilon__File_Explorer_Configuration}" action="{!init}" tabStyle="S3_Link_Administration__tab">
+<apex:include pageName="NEILON__apIncludeJavaScript" />
+<div id="splashDiv" class="apInitiallyDivDisplayNone">
+    <div class="apdisableBackPage" style="position:fixed;"></div>
+     <div class="apsplashDiv">
+        <div class="apcircle"><apex:image value="{!URLFOR($Resource.NEILON__AppurinUtils, 'resources/images/LoadingCircle.gif')}"></apex:image></div>
+        <div class="aptxt">{!$Label.neilon__Please_Wait}</div>
+    </div>
+</div>
+<style>
+    .apsplashDiv {
+        top: 150px !important;
+        left: 450px !important;
+    }
+</style>
+<apex:pagemessages rendered="{!isError}"/>
+<apex:form id="form" rendered="{!!isError}">
+<apex:actionStatus id="splashStatus" onstart="startSplash();" onstop="endSplash(); " />
+<apex:sectionHeader title="{!$Label.neilon__Configuration}" subtitle="{!$Label.neilon__File_Explorer_Configuration_Subtitle}" description="{!$Label.neilon__File_Explorer_Configuration_Page_Description}" />
+    <apex:pageBlock id="pb" mode="Edit">
+      <apex:pagemessages />
+      <apex:pageBlockButtons >
+          <apex:commandButton styleClass="apActiveButton" value="{!$Label.neilon__Save}" action="{!Save}" status="splashStatus" reRender="pb"/>
+          <apex:commandButton styleClass="apActiveButton" value="{!$Label.neilon__Reset_to_System_Default_Button}" action="{!initialize}" reRender="pb" status="splashStatus"/>
+      </apex:pageBlockButtons>
+      <apex:pageBlockSection columns="2" id="configurationTypeSection">
+	      <apex:pageBlockSectionItem helpText="{!$Label.neilon__File_Explorer_Name_Helptext}">
+	          <apex:outputLabel value="{!$Label.neilon__Configuration}"></apex:outputLabel>
+	          <apex:panelGroup >
+	              <apex:selectList value="{!selectedConfigurationType}" size="1">
+	                  <apex:selectOptions value="{!configurations}"></apex:selectOptions>
+	                  <apex:actionSupport event="onchange" status="splashStatus" action="{!refreshOnConfigurationChange}" reRender="pb"/>                                    
+	              </apex:selectList>
+	          </apex:panelGroup>
+	      </apex:pageblockSectionItem>
+      </apex:pageBlockSection>
+      <apex:pageblockSection id="pbs1" title="Page configuration" collapsible="false">
+          <apex:inputField value="{!edConfiguration.NEILON__Enable_Search__c}"/>
+          <apex:outputField rendered="{!selectedConfigurationType != 'File Explorer Page Configuration'}" value="{!edConfiguration.NEILON__Show_Header__c}"/>
+          <apex:inputField rendered="{!selectedConfigurationType == 'File Explorer Page Configuration'}" value="{!edConfiguration.NEILON__Show_Header__c}"/>
+          <apex:outputField rendered="{!selectedConfigurationType != 'File Explorer Page Configuration'}" value="{!edConfiguration.NEILON__Show_Hierarchical_File_UI__c}"/>
+          <apex:inputField rendered="{!selectedConfigurationType == 'File Explorer Page Configuration'}" value="{!edConfiguration.NEILON__Show_Hierarchical_File_UI__c}"/>
+          <apex:inputField value="{!edConfiguration.NEILON__Page_Size__c}"/>
+          <apex:inputField value="{!edConfiguration.NEILON__Show_Extension_Icon__c}"/>
+          <apex:inputField value="{!edConfiguration.NEILON__Static_Resource_Name__c}"/>
+      </apex:pageblockSection>
+      <apex:pageBlockSection columns="1" id="pbs2" title="{!$ObjectType.NEILON__File_Explorer_Page_Configuration__c.Fields.NEILON__File_Detail_Fields__c.label}" collapsible="false">
+          <apex:pageBlockSectionItem id="pbSectionForFields" helpText="{!$ObjectType.NEILON__File_Explorer_Page_Configuration__c.Fields.NEILON__File_Detail_Fields__c.inlineHelpText}">
+            <apex:outputLabel value="{!$Label.neilon__Visible} {!$Label.neilon__Fields}"/>
+            <apex:panelGrid columns="4">
+                <apex:panelGroup >
+                    <apex:outputLabel value="{!$Label.neilon__Available} {!$Label.neilon__Fields}"></apex:outputLabel>
+                    <br />
+                    <apex:selectList styleClass="selectListStyle" style="width:200px;" multiselect="true" size="7"
+                            value="{!leftSelectedFields}">
+                        <apex:selectOptions value="{!leftAvailableFields}"></apex:selectOptions>
+                    </apex:selectList>
+                </apex:panelGroup>
+                <apex:panelGroup >
+                    <br />
+                    <br />
+                    <apex:commandButton value=">" action="{!movingFieldsToRight}"
+                            reRender="pbs2"> 
+                    </apex:commandButton>                        
+                    <br />
+                    <br />
+                    <apex:commandButton value="<" action="{!movingFieldsToLeft}"
+                            reRender="pbs2"/>
+                </apex:panelGroup>
+                <apex:panelGroup >
+                    <apex:outputLabel value="{!$Label.neilon__Selected} {!$Label.neilon__Fields}"></apex:outputLabel>
+                    <br />
+                    <apex:selectList styleClass="selectListStyle" style="width:200px;" multiselect="true" size="7"
+                            value="{!rightSelectedFields}">
+                        <apex:selectOptions value="{!rightAvailableFields}"></apex:selectOptions>
+                    </apex:selectList>
+                </apex:panelGroup>  
+            </apex:panelGrid>
+        </apex:pageBlockSectionItem>
+    </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:form> 
+</apex:page>

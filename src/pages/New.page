@@ -1,0 +1,26 @@
+<apex:page sidebar="false" showHeader="false" standardController="Account">
+
+    <apex:form >
+        <apex:pageBlock title="Account Details" tabStyle="Opportunity" >  
+          
+            <apex:pageBlockSection title="Account Information"  columns="3"> 
+            
+                <apex:inputField value="{!Account.Name}"/>
+                <apex:inputField value="{!Account.Fax}"/>
+                <apex:inputField value="{!Account.Active__c}"/>
+                <apex:inputField value="{!Account.AccountNumber}"/>
+                
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockButtons location="both">
+        
+            <apex:commandButton value="SAVE" action="{!save}"/>
+            <apex:commandButton value="Delete" action="{!Delete}"/>
+        
+        
+        </apex:pageBlockButtons>
+        </apex:pageBlock>
+        
+    
+    </apex:form>  
+</apex:page>

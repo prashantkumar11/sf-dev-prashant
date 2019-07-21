@@ -1,0 +1,18 @@
+<apex:page standardController="Account" recordSetVar="Accounts" lightningStylesheets="true" >
+                  
+     <apex:image url="{!$Resource.LogoNew}" width="50" height="50"/>
+     <apex:includeScript value="{!$Resource.TestJS}"/>
+     
+    
+    <apex:pageblock >
+        <apex:repeat var="a" value="{!Accounts}" >
+            <li>
+                <apex:outputLink value="/{!a.ID}" >
+                    <apex:outputText value="{!a.Name}"/>
+                    <apex:outputText value="{!a.Phone}" />
+
+                </apex:outputLink>
+            </li>
+        </apex:repeat>
+    </apex:pageblock>
+</apex:page>

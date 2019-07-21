@@ -1,0 +1,16 @@
+<!--**********************************************************************************
+* Copyright © 2015-2016, Neilon Inc.
+* All rights reserved
+*
+* VisualForce Page: edAccountFileExplorer
+* Created by Anil Meghnathi
+
+* - File explorer page for account.
+
+* - Modifications:
+* - Anil Meghnathi - Initial 
+***********************************************************************************-->
+<apex:page standardController="Account" applyHtmlTag="false" showHeader="false" extensions="NEILON.edAccountFileExplorerController">
+    <apex:include pageName="NEILON__apIncludeJavaScript" />
+    <apex:iframe id="iframeForHomePage" src="/apex/edHome?mainObjectFieldAPI={!strMainObjectFieldAPI}&mainObjectId={!strMainObjectId}" width="99%" height="400px;" frameborder="false"></apex:iframe>
+</apex:page>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <defaultLandingTab>Amazon_File_System</defaultLandingTab>
+    <description>Salesforce to Amazon S3. Store the files into Amzon.</description>
+    <label>S3-Link</label>
+    <logo>Appurin_Images/Neilon_Logo.png</logo>
+    <tab>S3_Link_Administration</tab>
+    <tab>Folder__c</tab>
+    <tab>File__c</tab>
+    <tab>Amazon_File_System</tab>
+    <tab>SFoundatioAPI__Weather__c</tab>
+    <tab>SFoundatioAPI__Custom__c</tab>
+    <tab>SFoundatioAPI__ChildObjectDemo__c</tab>
+    <tab>SFoundatioAPI__MasterObjectDemo__c</tab>
+    <tab>SFoundatioAPI__DemoNew__c</tab>
+    <tab>SFoundatioAPI__Test_Train__c</tab>
+    <tab>SFoundatioAPI__Candidate__c</tab>
+    <tab>SFoundatioAPI__Branch__c</tab>
+    <tab>SFoundatioAPI__Car_Name__c</tab>
+    <tab>SFoundatioAPI__Car_Part__c</tab>
+    <tab>SFoundatioAPI__Demo__c</tab>
+    <tab>SFoundatioAPI__Article__c</tab>
+    <tab>SFoundatioAPI__ArticleTVPrice__c</tab>
+    <tab>SFoundatioAPI__TVPrice__c</tab>
+    <tab>SFoundatioAPI__Bank_Account__c</tab>
+    <tab>SFoundatioAPI__DessertCollection__c</tab>
+    <tab>SFoundatioAPI__MexicanRestaurant__c</tab>
+    <tab>SFoundatioAPI__Army__c</tab>
+    <tab>SFoundatioAPI__Kid__c</tab>
+    <tab>SFoundatioAPI__NewSchool__c</tab>
+    <tab>SFoundatioAPI__Machine_Customer__c</tab>
+    <tab>SFoundatioAPI__Machine__c</tab>
+    <tab>SFoundatioAPI__Truck_Parts_Company__c</tab>
+    <tab>SFoundatioAPI__Truck_Company__c</tab>
+    <tab>SFoundatioAPI__Truck_Parts__c</tab>
+    <tab>SFoundatioAPI__NewTruck__c</tab>
+    <tab>SFoundatioAPI__Institution__c</tab>
+    <tab>SFoundatioAPI__Enroll__c</tab>
+    <tab>SFoundatioAPI__Society__c</tab>
+    <tab>SFoundatioAPI__Resident__c</tab>
+    <tab>SFoundatioAPI__CareTest__c</tab>
+    <tab>SFoundatioAPI__PartsCompany__c</tab>
+    <tab>SFoundatioAPI__CarSparePart__c</tab>
+</CustomApplication>

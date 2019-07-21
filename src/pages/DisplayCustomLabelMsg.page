@@ -1,0 +1,5 @@
+<apex:page >
+<apex:outputText >{!$Label.Custom_Label_Description}</apex:outputText>
+
+
+</apex:page>
