@@ -7,6 +7,8 @@ global class AccountBatch implements Database.Batchable<sObject>{
    }
 
    global void execute(Database.BatchableContext BC, List<Account> scope){
+      system.debug('HHHHHHHHHHHHHHHHHHHHHHHH');
+      
      List<Account> act = new List<Account>();
      integer i = 0;
      for(Account s : scope){
